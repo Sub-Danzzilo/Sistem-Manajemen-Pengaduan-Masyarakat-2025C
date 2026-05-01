@@ -11,7 +11,7 @@ use Illuminate\View\View;
 
 class AssignmentFollowUpController extends Controller
 {
-    public function index(Request $request): View
+    public function index(Request $request, string $account, string $role): View
     {
         $status = $request->string('status')->toString();
 
@@ -63,7 +63,7 @@ class AssignmentFollowUpController extends Controller
         return back()->with('status', 'Pengaduan berhasil didisposisikan.');
     }
 
-    public function progress(Complaint $complaint, Request $request): RedirectResponse
+    public function progress(string $account, string $role, Complaint $complaint, Request $request): RedirectResponse
     {
         $this->ensureOwnedByUnit($complaint, $request->user()->id);
 
@@ -90,7 +90,7 @@ class AssignmentFollowUpController extends Controller
         return back()->with('status', $isUpdate ? 'Catatan progres berhasil diperbarui.' : 'Status pengaduan diperbarui menjadi dalam proses.');
     }
 
-    public function resolve(Complaint $complaint, Request $request): RedirectResponse
+    public function resolve(string $account, string $role, Complaint $complaint, Request $request): RedirectResponse
     {
         $this->ensureOwnedByUnit($complaint, $request->user()->id);
 

@@ -11,7 +11,7 @@ use Illuminate\View\View;
 
 class VerificationController extends Controller
 {
-    public function index(Request $request): View
+    public function index(Request $request, string $account, string $role): View
     {
         $status = $request->string('status')->toString();
 
@@ -30,7 +30,7 @@ class VerificationController extends Controller
         return view('admin.complaints.index', compact('complaints', 'status', 'units'));
     }
 
-    public function decision(Complaint $complaint, Request $request): RedirectResponse
+    public function decision(string $account, string $role, Complaint $complaint, Request $request): RedirectResponse
     {
         $isAlreadyProcessed = $complaint->status !== Complaint::STATUS_SUBMITTED;
 

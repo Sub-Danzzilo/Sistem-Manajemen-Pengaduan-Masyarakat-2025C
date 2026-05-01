@@ -13,8 +13,11 @@ use Illuminate\Support\Facades\Route;
 Route::get('/', fn() => redirect()->route('login'));
 
 // Redirection helper for authenticated users to get into the /{account}/{role}/ format
-Route::get('/dashboard', function () {
-    return redirect()->route('dashboard');
+Route::get('/dashboard', function (\Illuminate\Http\Request $request) {
+    return redirect()->route('dashboard', [
+        'account' => \Illuminate\Support\Str::slug($request->user()->name),
+        'role' => strtolower($request->user()->role)
+    ]);
 })->middleware(['auth', 'verified']);
 
 Route::middleware(['auth', 'verified', 'account_role'])->prefix('{account}/{role}')->group(function () {

@@ -12,12 +12,12 @@ use Illuminate\View\View;
 
 class ComplaintController extends Controller
 {
-    public function create(): View
+    public function create(string $account, string $role): View
     {
         return view('complaints.create');
     }
 
-    public function store(Request $request): RedirectResponse
+    public function store(Request $request, string $account, string $role): RedirectResponse
     {
         $validated = $request->validate([
             'title' => ['required', 'string', 'max:255'],
@@ -63,7 +63,7 @@ class ComplaintController extends Controller
             ->with('status', 'Pengaduan berhasil dikirim.');
     }
 
-    public function myIndex(Request $request): View
+    public function myIndex(Request $request, string $account, string $role): View
     {
         $status = $request->string('status')->toString();
 
@@ -78,7 +78,7 @@ class ComplaintController extends Controller
         return view('complaints.my-index', compact('complaints', 'status'));
     }
 
-    public function show(Complaint $complaint, Request $request): View
+    public function show(string $account, string $role, Complaint $complaint, Request $request): View
     {
         $user = $request->user();
         

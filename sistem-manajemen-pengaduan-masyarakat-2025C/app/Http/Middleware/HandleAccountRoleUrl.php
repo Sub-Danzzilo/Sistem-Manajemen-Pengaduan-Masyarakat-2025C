@@ -20,32 +20,31 @@ class HandleAccountRoleUrl
     public function handle(Request $request, Closure $next): Response
     {
         $user = $request->user();
-        if (!$user) {
-            return $next($request);
-        }
+        
+        if ($user) {
+            $expectedAccount = Str::slug($user->name);
+            $expectedRole = strtolower($user->role);
 
-        $account = $request->route('account');
-        $role = $request->route('role');
+            // Set defaults for route() helper globally if user is logged in
+            URL::defaults([
+                'account' => $expectedAccount,
+                'role' => $expectedRole,
+            ]);
 
-        $expectedAccount = Str::slug($user->name);
-        $expectedRole = strtolower($user->role);
+            $account = $request->route('account');
+            $role = $request->route('role');
 
-        // Set defaults for route() helper so we don't have to pass them manually
-        URL::defaults([
-            'account' => $expectedAccount,
-            'role' => $expectedRole,
-        ]);
+            // If parameters are present in the URL, validate them to ensure consistency
+            if ($account && $role) {
+                if ($account !== $expectedAccount || $role !== $expectedRole) {
+                    // If there's a mismatch, redirect to the canonical URL for this user
+                    $routeName = $request->route()->getName();
+                    $routeParams = $request->route()->parameters();
+                    $routeParams['account'] = $expectedAccount;
+                    $routeParams['role'] = $expectedRole;
 
-        // If parameters are present in the URL, validate them to ensure consistency
-        if ($account && $role) {
-            if ($account !== $expectedAccount || $role !== $expectedRole) {
-                // If there's a mismatch, redirect to the canonical URL for this user
-                $routeName = $request->route()->getName();
-                $routeParams = $request->route()->parameters();
-                $routeParams['account'] = $expectedAccount;
-                $routeParams['role'] = $expectedRole;
-
-                return redirect()->route($routeName, $routeParams);
+                    return redirect()->route($routeName, $routeParams);
+                }
             }
         }
 

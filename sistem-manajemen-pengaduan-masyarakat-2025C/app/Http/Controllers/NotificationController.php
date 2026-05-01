@@ -8,7 +8,7 @@ use Illuminate\View\View;
 
 class NotificationController extends Controller
 {
-    public function indexForCitizen(Request $request): View
+    public function indexForCitizen(Request $request, string $account, string $role): View
     {
         $actions = ComplaintAction::query()
             ->with('complaint')
@@ -23,7 +23,7 @@ class NotificationController extends Controller
         return view('notifications.citizen', compact('actions'));
     }
 
-    public function indexForUnit(Request $request): View
+    public function indexForUnit(Request $request, string $account, string $role): View
     {
         $actions = ComplaintAction::query()
             ->with('complaint')
