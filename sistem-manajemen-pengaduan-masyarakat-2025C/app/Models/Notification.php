@@ -14,22 +14,31 @@ class Notification extends DatabaseNotification
     protected static function booted()
     {
         static::created(function ($notification) {
-            $user = $notification->notifiable;
-            if ($user) {
-                // Keep only the latest 50 notifications
-                $notificationsToKeep = 50;
-                
-                // Get IDs of notifications that exceed the limit (oldest ones)
-                $idsToDelete = self::where('notifiable_id', $user->id)
-                    ->where('notifiable_type', get_class($user))
-                    ->latest()
-                    ->skip($notificationsToKeep)
-                    ->pluck('id');
+            try {
+                if ($notification->notifiable_id) {
+                    $notifiableId = $notification->notifiable_id;
+                    $notifiableType = $notification->notifiable_type;
 
-                if ($idsToDelete->isNotEmpty()) {
-                    self::whereIn('id', $idsToDelete)->delete();
+                    // Keep only the latest 50 notifications
+                    // SQLite compatible approach: get IDs to keep, then delete others
+                    $idsToKeep = self::where('notifiable_id', $notifiableId)
+                        ->where('notifiable_type', $notifiableType)
+                        ->latest()
+                        ->limit(50)
+                        ->pluck('id');
+
+                    if ($idsToKeep->isNotEmpty()) {
+                        self::where('notifiable_id', $notifiableId)
+                            ->where('notifiable_type', $notifiableType)
+                            ->whereNotIn('id', $idsToKeep)
+                            ->delete();
+                    }
                 }
+            } catch (\Throwable $e) {
+                // Log error but don't crash the main process
+                \Illuminate\Support\Facades\Log::error('Gagal membersihkan notifikasi lama: ' . $e->getMessage());
             }
         });
     }
+
 }

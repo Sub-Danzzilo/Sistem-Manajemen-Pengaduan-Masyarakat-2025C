@@ -7,11 +7,6 @@
 
     <div class="py-10">
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8 space-y-4">
-            @if (session('status'))
-                <div class="bg-green-50 text-green-700 px-4 py-3 rounded-md border border-green-200">
-                    {{ session('status') }}
-                </div>
-            @endif
 
             <div class="bg-white shadow-sm sm:rounded-lg p-6">
                 <form method="GET" class="flex flex-wrap gap-3 items-end">

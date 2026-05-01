@@ -7,6 +7,7 @@ use Database\Factories\UserFactory;
 use Illuminate\Database\Eloquent\Attributes\Fillable;
 use Illuminate\Database\Eloquent\Attributes\Hidden;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\MorphMany;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
@@ -22,12 +23,11 @@ class User extends Authenticatable
     /**
      * Override the default notifications relationship to use custom model.
      */
-    public function notifications(): HasMany
+    public function notifications(): MorphMany
     {
-        return $this->hasMany(CustomNotification::class, 'notifiable_id')
-            ->where('notifiable_type', $this->getMorphClass())
-            ->latest();
+        return $this->morphMany(CustomNotification::class, 'notifiable')->latest();
     }
+
 
     public const ROLE_MASYARAKAT = 'masyarakat';
     public const ROLE_ADMIN = 'admin';

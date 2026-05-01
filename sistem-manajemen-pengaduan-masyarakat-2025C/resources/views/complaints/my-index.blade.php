@@ -35,11 +35,6 @@
                 </form>
             </div>
 
-            @if (session('status'))
-                <div class="bg-green-50 text-green-700 px-4 py-3 rounded-xl border border-green-200">
-                    {{ session('status') }}
-                </div>
-            @endif
 
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                 @forelse ($complaints as $complaint)

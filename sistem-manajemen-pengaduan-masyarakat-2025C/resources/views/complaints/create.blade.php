@@ -14,27 +14,6 @@
                         <p class="text-sm text-gray-500 mt-1">Isi form di bawah ini dengan informasi yang akurat untuk mempercepat proses tindak lanjut.</p>
                     </div>
 
-                    <!-- Status Notification -->
-                    @if (session('status'))
-                        <div class="mb-6 p-4 bg-emerald-50 border border-emerald-200 text-emerald-700 rounded-2xl flex items-center gap-3">
-                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>
-                            <span class="font-bold text-sm">{{ session('status') }}</span>
-                        </div>
-                    @endif
-
-                    @if ($errors->any())
-                        <div class="mb-6 p-4 bg-red-50 border border-red-200 text-red-700 rounded-2xl flex flex-col gap-1">
-                            <div class="flex items-center gap-3 mb-1">
-                                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
-                                <span class="font-bold text-sm">Gagal Mengirim Laporan:</span>
-                            </div>
-                            <ul class="list-disc list-inside text-xs ml-8">
-                                @foreach ($errors->all() as $error)
-                                    <li>{{ $error }}</li>
-                                @endforeach
-                            </ul>
-                        </div>
-                    @endif
 
                     <form method="POST" action="{{ route('complaints.store') }}" enctype="multipart/form-data" class="space-y-6" 
                         x-data="fileManager()" 
