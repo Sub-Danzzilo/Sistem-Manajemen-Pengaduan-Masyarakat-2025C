@@ -69,7 +69,16 @@
                         </h4>
                         <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
                             @forelse ($complaint->attachments as $attachment)
-                                <a href="{{ asset('storage/'.$attachment->file_path) }}" target="_blank" class="flex items-center p-4 bg-gray-50 rounded-xl border border-gray-100 hover:border-orange-200 transition-colors group">
+                                @php
+                                    $previewUrl = $attachment->attachment_type === 'audio' 
+                                        ? route('attachments.preview', [
+                                            'account' => request()->route('account'),
+                                            'role' => request()->route('role'),
+                                            'attachment' => $attachment->id
+                                        ])
+                                        : asset('storage/'.$attachment->file_path);
+                                @endphp
+                                <a href="{{ $previewUrl }}" target="_blank" class="flex items-center p-4 bg-gray-50 rounded-xl border border-gray-100 hover:border-orange-200 transition-colors group">
                                     <div class="p-3 bg-white rounded-lg shadow-sm mr-4 text-orange-500 group-hover:bg-orange-50 transition-colors">
                                         @if($attachment->attachment_type === 'image')
                                             <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"></path></svg>

@@ -175,6 +175,30 @@ class ComplaintController extends Controller
         return view('complaints.show', compact('complaint'));
     }
 
+    public function previewAttachment(string $account, string $role, ComplaintAttachment $attachment, Request $request)
+    {
+        $user = $request->user();
+        $complaint = $attachment->complaint;
+        
+        $isAllowed = $user->isAdmin() 
+            || $complaint->reporter_id === $user->id
+            || ($user->isInstansi() && $complaint->assigned_unit_id === $user->id);
+
+        abort_if(!$isAllowed, 403);
+
+        $path = storage_path('app/public/' . $attachment->file_path);
+        
+        if (!file_exists($path)) {
+            abort(404);
+        }
+
+        // For audio, we want to ensure it's served as inline to play in browser
+        return response()->file($path, [
+            'Content-Type' => $attachment->mime_type,
+            'Content-Disposition' => 'inline; filename="' . $attachment->original_name . '"'
+        ]);
+    }
+
     private function resolveAttachmentType(?string $mime): string
     {
         if (! $mime) {

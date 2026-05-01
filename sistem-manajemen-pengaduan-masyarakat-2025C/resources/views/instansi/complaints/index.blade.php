@@ -80,8 +80,17 @@
                                         <p class="text-[10px] font-bold text-gray-400 uppercase tracking-widest">Lampiran ({{ $complaint->attachments->count() }})</p>
                                         <div class="flex flex-wrap gap-2">
                                             @foreach($complaint->attachments as $file)
-                                                @php $isImage = $file->attachment_type === 'image'; @endphp
-                                                <a href="{{ asset('storage/'.$file->file_path) }}" target="_blank" class="group relative w-16 h-16 rounded-lg overflow-hidden border border-gray-200 hover:border-orange-400 transition-colors shadow-sm">
+                                                @php 
+                                                    $isImage = $file->attachment_type === 'image'; 
+                                                    $previewUrl = $file->attachment_type === 'audio' 
+                                                        ? route('attachments.preview', [
+                                                            'account' => request()->route('account'),
+                                                            'role' => request()->route('role'),
+                                                            'attachment' => $file->id
+                                                        ])
+                                                        : asset('storage/'.$file->file_path);
+                                                @endphp
+                                                <a href="{{ $previewUrl }}" target="_blank" class="group relative w-16 h-16 rounded-lg overflow-hidden border border-gray-200 hover:border-orange-400 transition-colors shadow-sm">
                                                     @if($isImage)
                                                         <img src="{{ asset('storage/'.$file->file_path) }}" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-300">
                                                     @else

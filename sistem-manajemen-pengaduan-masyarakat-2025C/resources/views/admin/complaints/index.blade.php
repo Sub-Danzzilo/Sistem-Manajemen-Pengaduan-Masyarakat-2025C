@@ -82,8 +82,17 @@
                                         <p class="text-[10px] font-bold text-gray-400 uppercase tracking-widest">Lampiran ({{ $complaint->attachments->count() }})</p>
                                         <div class="flex flex-wrap gap-2">
                                             @foreach($complaint->attachments as $file)
-                                                @php $isImage = $file->attachment_type === 'image'; @endphp
-                                                <a href="{{ asset('storage/'.$file->file_path) }}" target="_blank" class="group relative w-16 h-16 rounded-lg overflow-hidden border border-gray-200 hover:border-orange-400 transition-colors shadow-sm">
+                                                @php 
+                                                    $isImage = $file->attachment_type === 'image'; 
+                                                    $previewUrl = $file->attachment_type === 'audio' 
+                                                        ? route('attachments.preview', [
+                                                            'account' => request()->route('account'),
+                                                            'role' => request()->route('role'),
+                                                            'attachment' => $file->id
+                                                        ])
+                                                        : asset('storage/'.$file->file_path);
+                                                @endphp
+                                                <a href="{{ $previewUrl }}" target="_blank" class="group relative w-16 h-16 rounded-lg overflow-hidden border border-gray-200 hover:border-orange-400 transition-colors shadow-sm">
                                                     @if($isImage)
                                                         <img src="{{ asset('storage/'.$file->file_path) }}" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-300">
                                                     @else
@@ -93,7 +102,7 @@
                                                             @elseif($file->attachment_type === 'audio')
                                                                 <svg class="w-6 h-6 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11a7 7 0 01-7 7m0 0a7 7 0 01-7-7m7 7v4m0 0H8m4 0h4m-4-8a3 3 0 01-3-3V5a3 3 0 116 0v6a3 3 0 01-3 3z"></path></svg>
                                                             @else
-                                                                <svg class="w-6 h-6 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1.024.195 1.414.586l7 7a2 2 0 010 2.828l-7 7a2 2 0 01-2.828 0l-7-7A1.994 1.994 0 013 12V7a4 4 0 014-4z"></path></svg>
+                                                                <svg class="w-6 h-6 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path></svg>
                                                             @endif
                                                         </div>
                                                     @endif
