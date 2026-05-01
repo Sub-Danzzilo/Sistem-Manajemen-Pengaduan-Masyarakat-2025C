@@ -55,6 +55,7 @@ Route::middleware(['auth', 'verified', 'account_role'])->prefix('{account}/{role
 
     Route::get('/laporan/{complaint}', [ComplaintController::class, 'show'])->name('complaints.show');
     Route::get('/lampiran/{attachment}/preview', [ComplaintController::class, 'previewAttachment'])->name('attachments.preview');
+    Route::get('/lampiran/{attachment}/download', [ComplaintController::class, 'downloadAttachment'])->name('attachments.download');
 });
 
 require __DIR__.'/auth.php';
