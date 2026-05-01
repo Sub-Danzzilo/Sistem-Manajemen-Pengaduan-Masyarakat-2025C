@@ -16,7 +16,7 @@ class VerificationController extends Controller
         $status = $request->string('status')->toString();
 
         $complaints = Complaint::query()
-            ->with(['reporter', 'assignedUnit'])
+            ->with(['reporter', 'assignedUnit', 'attachments'])
             ->when($status !== '', fn ($query) => $query->where('status', $status))
             ->latest()
             ->paginate(10)
