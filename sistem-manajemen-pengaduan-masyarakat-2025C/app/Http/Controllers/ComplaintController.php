@@ -24,8 +24,20 @@ class ComplaintController extends Controller
             'description' => ['required', 'string', 'max:5000'],
             'location_text' => ['nullable', 'string', 'max:255'],
             'category' => ['nullable', 'string', 'max:100'],
-            'attachments.*' => ['nullable', 'file', 'max:25600', 'mimes:jpg,jpeg,png,pdf,doc,docx,mp4,mov,avi,mp3,wav,m4a,ogg,webm'],
+            'attachments.*' => ['nullable', 'file', 'mimes:jpg,jpeg,png,pdf,doc,docx,mp4,mov,avi,mp3,wav,m4a,ogg,webm'],
         ]);
+
+        // Custom Total Size Check (50MB = 51200 KB)
+        $totalSize = 0;
+        if ($request->hasFile('attachments')) {
+            foreach ($request->file('attachments') as $file) {
+                $totalSize += $file->getSize();
+            }
+        }
+        
+        if ($totalSize > 51200 * 1024) {
+            return back()->withErrors(['attachments' => 'Total ukuran file tidak boleh melebihi 50MB.'])->withInput();
+        }
 
         $complaint = Complaint::create([
             'reporter_id' => $request->user()->id,
@@ -45,22 +57,93 @@ class ComplaintController extends Controller
             notes: 'Pengaduan dibuat oleh masyarakat.',
         );
 
-        foreach ($request->file('attachments', []) as $file) {
-            $path = $file->store("complaints/{$complaint->id}", 'public');
+        if ($request->hasFile('attachments')) {
+            foreach ($request->file('attachments') as $file) {
+                $mime = $file->getMimeType();
+                $type = $this->resolveAttachmentType($mime);
+                
+                if ($type === ComplaintAttachment::TYPE_IMAGE) {
+                    // Compress Image
+                    $path = $this->compressAndStoreImage($file, "complaints/{$complaint->id}");
+                } else {
+                    // Normal Store
+                    $path = $file->store("complaints/{$complaint->id}", 'public');
+                }
 
-            ComplaintAttachment::create([
-                'complaint_id' => $complaint->id,
-                'uploaded_by_user_id' => $request->user()->id,
-                'attachment_type' => $this->resolveAttachmentType($file->getMimeType()),
-                'original_name' => $file->getClientOriginalName(),
-                'file_path' => $path,
-                'mime_type' => $file->getMimeType() ?? 'application/octet-stream',
-                'file_size' => $file->getSize(),
-            ]);
+                ComplaintAttachment::create([
+                    'complaint_id' => $complaint->id,
+                    'uploaded_by_user_id' => $request->user()->id,
+                    'attachment_type' => $type,
+                    'original_name' => $file->getClientOriginalName(),
+                    'file_path' => $path,
+                    'mime_type' => $mime ?? 'application/octet-stream',
+                    'file_size' => \Illuminate\Support\Facades\Storage::disk('public')->size($path),
+                ]);
+            }
         }
 
         return redirect()->route('complaints.my')
             ->with('status', 'Pengaduan berhasil dikirim.');
+    }
+
+    /**
+     * Compress and store image using GD library
+     */
+    private function compressAndStoreImage($file, $folder): string
+    {
+        $extension = $file->getClientOriginalExtension();
+        $filename = \Illuminate\Support\Str::random(40) . '.jpg'; // Always save as jpg for better compression
+        $path = $folder . '/' . $filename;
+        $fullPath = storage_path('app/public/' . $path);
+
+        if (!file_exists(storage_path('app/public/' . $folder))) {
+            mkdir(storage_path('app/public/' . $folder), 0755, true);
+        }
+
+        $sourcePath = $file->getRealPath();
+        $info = getimagesize($sourcePath);
+        
+        // Create image from source
+        if ($info['mime'] == 'image/jpeg') $image = imagecreatefromjpeg($sourcePath);
+        elseif ($info['mime'] == 'image/gif') $image = imagecreatefromgif($sourcePath);
+        elseif ($info['mime'] == 'image/png') $image = imagecreatefrompng($sourcePath);
+        else {
+            return $file->store($folder, 'public'); // Fallback to normal store
+        }
+
+        // Fix Orientation if EXIF data exists
+        if ($info['mime'] == 'image/jpeg' && function_exists('exif_read_data')) {
+            $exif = @exif_read_data($sourcePath);
+            if($exif && isset($exif['Orientation'])) {
+                switch($exif['Orientation']) {
+                    case 3: $image = imagerotate($image, 180, 0); break;
+                    case 6: $image = imagerotate($image, -90, 0); break;
+                    case 8: $image = imagerotate($image, 90, 0); break;
+                }
+            }
+        }
+
+        // Resize if too large (Max Width 1600px)
+        $width = imagesx($image);
+        $height = imagesy($image);
+        $maxWidth = 1600;
+        
+        if ($width > $maxWidth) {
+            $newWidth = $maxWidth;
+            $newHeight = floor($height * ($maxWidth / $width));
+            $tmpImg = imagecreatetruecolor($newWidth, $newHeight);
+            
+            // Handle transparency for PNG/GIF if we were keeping them, but we're converting to JPG
+            imagecopyresampled($tmpImg, $image, 0, 0, 0, 0, $newWidth, $newHeight, $width, $height);
+            imagedestroy($image);
+            $image = $tmpImg;
+        }
+
+        // Save as JPEG with 75% quality
+        imagejpeg($image, $fullPath, 75);
+        imagedestroy($image);
+
+        return $path;
     }
 
     public function myIndex(Request $request, string $account, string $role): View

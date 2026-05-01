@@ -14,7 +14,9 @@
                         <p class="text-sm text-gray-500 mt-1">Isi form di bawah ini dengan informasi yang akurat untuk mempercepat proses tindak lanjut.</p>
                     </div>
 
-                    <form method="POST" action="{{ route('complaints.store') }}" enctype="multipart/form-data" class="space-y-6" x-data="{ submitting: false }" @submit="submitting = true">
+                    <form method="POST" action="{{ route('complaints.store') }}" enctype="multipart/form-data" class="space-y-6" 
+                        x-data="fileManager()" 
+                        @submit.prevent="submitForm">
                         @csrf
 
                         <div class="space-y-2">
@@ -47,19 +49,83 @@
                             </div>
                         </div>
 
-                        <div class="space-y-2 p-6 bg-gray-50 rounded-2xl border border-dashed border-gray-200">
-                            <x-input-label for="attachments" :value="'Lampiran Pendukung'" />
-                            <p class="text-xs text-gray-500 mb-3">Anda bisa mengunggah foto, dokumen, video, atau rekaman suara (maks. 25MB/file).</p>
-                            <input id="attachments" name="attachments[]" type="file" multiple class="block w-full text-sm text-gray-600 file:mr-4 file:py-2 file:px-4 file:rounded-xl file:border-0 file:bg-orange-500 file:text-white hover:file:bg-orange-600 cursor-pointer" />
-                            <x-input-error :messages="$errors->get('attachments.*')" class="mt-2" />
+                        <!-- Multi-File Upload Section -->
+                        <div class="space-y-4 p-6 bg-gray-50 rounded-2xl border border-dashed border-gray-200">
+                            <div>
+                                <x-input-label :value="'Lampiran Pendukung'" />
+                                <p class="text-xs text-gray-500 mb-3">Pilih foto, video, atau dokumen (Total maks. 50MB).</p>
+                                
+                                <div class="flex items-center gap-2">
+                                    <label class="cursor-pointer inline-flex items-center px-4 py-2 bg-white border border-gray-300 rounded-xl font-bold text-xs text-gray-700 uppercase tracking-widest shadow-sm hover:bg-gray-50 transition-colors">
+                                        <svg class="w-4 h-4 mr-2 text-orange-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path></svg>
+                                        Pilih File
+                                        <input type="file" @change="addFiles($event.target.files)" multiple class="hidden" accept="image/*,video/*,audio/*,.pdf,.doc,.docx">
+                                    </label>
+                                    <span x-text="`${files.length} file dipilih`" class="text-xs text-gray-400"></span>
+                                </div>
+                            </div>
+
+                            <!-- Total Size Warning -->
+                            <div x-show="totalSize > 0" class="flex items-center justify-between">
+                                <div class="flex items-center gap-2">
+                                    <div class="h-2 w-48 bg-gray-200 rounded-full overflow-hidden">
+                                        <div class="h-full transition-all duration-300" 
+                                             :class="totalSize > 51200 ? 'bg-red-500' : 'bg-orange-500'"
+                                             :style="`width: ${Math.min((totalSize/51200)*100, 100)}%`"
+                                        ></div>
+                                    </div>
+                                    <span class="text-[10px] font-bold" :class="totalSize > 51200 ? 'text-red-500' : 'text-gray-500'">
+                                        <span x-text="(totalSize/1024).toFixed(2)"></span> MB / 50 MB
+                                    </span>
+                                </div>
+                            </div>
+
+                            <!-- Files List -->
+                            <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4" x-show="files.length > 0">
+                                <template x-for="(file, index) in files" :key="index">
+                                    <div class="group relative aspect-square rounded-xl overflow-hidden bg-white border border-gray-100 shadow-sm">
+                                        <!-- Image Preview -->
+                                        <template x-if="file.type.startsWith('image/')">
+                                            <img :src="file.preview" class="w-full h-full object-cover">
+                                        </template>
+                                        
+                                        <!-- Other Icon Previews -->
+                                        <template x-if="!file.type.startsWith('image/')">
+                                            <div class="w-full h-full flex flex-col items-center justify-center p-2 text-center bg-gray-50">
+                                                <svg x-show="file.type.startsWith('video/')" class="w-8 h-8 text-gray-300" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 10l4.553-2.276A1 1 0 0121 8.618v6.764a1 1 0 01-1.447.894L15 14M5 18h8a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v8a2 2 0 002 2z"></path></svg>
+                                                <svg x-show="file.type.startsWith('audio/')" class="w-8 h-8 text-gray-300" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11a7 7 0 01-7 7m0 0a7 7 0 01-7-7m7 7v4m0 0H8m4 0h4m-4-8a3 3 0 01-3-3V5a3 3 0 116 0v6a3 3 0 01-3 3z"></path></svg>
+                                                <svg x-show="!file.type.startsWith('video/') && !file.type.startsWith('audio/')" class="w-8 h-8 text-gray-300" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1.024.195 1.414.586l7 7a2 2 0 010 2.828l-7 7a2 2 0 01-2.828 0l-7-7A1.994 1.994 0 013 12V7a4 4 0 014-4z"></path></svg>
+                                                <span x-text="truncateFilename(file.name)" class="mt-1 text-[8px] text-gray-400 truncate w-full px-1"></span>
+                                            </div>
+                                        </template>
+
+                                        <!-- Delete Button -->
+                                        <button @click.prevent="removeFile(index)" class="absolute top-1 right-1 p-1 bg-red-500 text-white rounded-full opacity-0 group-hover:opacity-100 transition-opacity shadow-sm">
+                                            <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+                                        </button>
+                                        
+                                        <!-- Overlay info on hover -->
+                                        <div class="absolute inset-x-0 bottom-0 p-1 bg-black/40 text-[8px] text-white opacity-0 group-hover:opacity-100 transition-opacity">
+                                            <span x-text="formatSize(file.size)"></span>
+                                        </div>
+                                    </div>
+                                </template>
+                            </div>
+
+                            <x-input-error :messages="$errors->get('attachments')" class="mt-2" />
+                            <div x-show="totalSize > 51200" class="text-xs text-red-500 font-bold">Total file melebihi batas 50MB. Harap kurangi file.</div>
                         </div>
 
+                        <!-- Real File Input (Hidden) -->
+                        <input type="file" name="attachments[]" x-ref="finalInput" class="hidden" multiple>
+
                         <div class="flex flex-col md:flex-row items-center gap-4 pt-4">
-                            <x-primary-button class="w-full md:w-auto px-10 py-3 rounded-xl justify-center disabled:opacity-75" x-bind:disabled="submitting">
+                            <x-primary-button class="w-full md:w-auto px-10 py-3 rounded-xl justify-center disabled:opacity-75" 
+                                x-bind:disabled="submitting || totalSize > 51200">
                                 <span x-show="!submitting">Kirim Laporan Sekarang</span>
                                 <span x-show="submitting" class="flex items-center gap-2">
                                     <svg class="animate-spin h-4 w-4 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path></svg>
-                                    Sedang Mengunggah...
+                                    Sedang Memproses...
                                 </span>
                             </x-primary-button>
                             <a href="{{ route('complaints.my') }}" x-show="!submitting" class="text-sm font-bold text-gray-500 hover:text-gray-700 transition-colors">
@@ -67,6 +133,65 @@
                             </a>
                         </div>
                     </form>
+
+                    <script>
+                        function fileManager() {
+                            return {
+                                files: [],
+                                submitting: false,
+                                totalSize: 0, // in KB
+
+                                addFiles(newFiles) {
+                                    for (let i = 0; i < newFiles.length; i++) {
+                                        const file = newFiles[i];
+                                        
+                                        // Add preview for images
+                                        if (file.type.startsWith('image/')) {
+                                            file.preview = URL.createObjectURL(file);
+                                        }
+
+                                        this.files.push(file);
+                                    }
+                                    this.calculateTotalSize();
+                                },
+
+                                removeFile(index) {
+                                    const file = this.files[index];
+                                    if (file.preview) URL.revokeObjectURL(file.preview);
+                                    this.files.splice(index, 1);
+                                    this.calculateTotalSize();
+                                },
+
+                                calculateTotalSize() {
+                                    this.totalSize = this.files.reduce((acc, file) => acc + (file.size / 1024), 0);
+                                },
+
+                                formatSize(size) {
+                                    if (size < 1024 * 1024) return (size / 1024).toFixed(1) + ' KB';
+                                    return (size / (1024 * 1024)).toFixed(1) + ' MB';
+                                },
+
+                                truncateFilename(name) {
+                                    return name.length > 15 ? name.substring(0, 12) + '...' : name;
+                                },
+
+                                submitForm() {
+                                    if (this.totalSize > 51200) return;
+                                    
+                                    this.submitting = true;
+
+                                    // Create a new DataTransfer to populate the real file input
+                                    const dataTransfer = new DataTransfer();
+                                    this.files.forEach(file => dataTransfer.items.add(file));
+                                    
+                                    this.$refs.finalInput.files = dataTransfer.files;
+                                    
+                                    // Actually submit
+                                    this.$el.submit();
+                                }
+                            }
+                        }
+                    </script>
                 </div>
             </div>
         </div>
