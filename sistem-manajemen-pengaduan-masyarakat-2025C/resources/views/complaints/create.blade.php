@@ -14,6 +14,28 @@
                         <p class="text-sm text-gray-500 mt-1">Isi form di bawah ini dengan informasi yang akurat untuk mempercepat proses tindak lanjut.</p>
                     </div>
 
+                    <!-- Status Notification -->
+                    @if (session('status'))
+                        <div class="mb-6 p-4 bg-emerald-50 border border-emerald-200 text-emerald-700 rounded-2xl flex items-center gap-3">
+                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>
+                            <span class="font-bold text-sm">{{ session('status') }}</span>
+                        </div>
+                    @endif
+
+                    @if ($errors->any())
+                        <div class="mb-6 p-4 bg-red-50 border border-red-200 text-red-700 rounded-2xl flex flex-col gap-1">
+                            <div class="flex items-center gap-3 mb-1">
+                                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                                <span class="font-bold text-sm">Gagal Mengirim Laporan:</span>
+                            </div>
+                            <ul class="list-disc list-inside text-xs ml-8">
+                                @foreach ($errors->all() as $error)
+                                    <li>{{ $error }}</li>
+                                @endforeach
+                            </ul>
+                        </div>
+                    @endif
+
                     <form method="POST" action="{{ route('complaints.store') }}" enctype="multipart/form-data" class="space-y-6" 
                         x-data="fileManager()" 
                         @submit.prevent="submitForm">
@@ -22,13 +44,11 @@
                         <div class="space-y-2">
                             <x-input-label for="title" :value="'Judul Singkat Laporan'" />
                             <x-text-input id="title" name="title" type="text" class="block w-full rounded-xl" :value="old('title')" placeholder="Contoh: Lampu jalan mati di Jl. Merdeka" required />
-                            <x-input-error :messages="$errors->get('title')" class="mt-2" />
                         </div>
 
                         <div class="space-y-2">
                             <x-input-label for="description" :value="'Detail Laporan / Kronologi'" />
                             <textarea id="description" name="description" rows="5" class="block w-full border-gray-300 focus:border-orange-500 focus:ring-orange-500 rounded-xl shadow-sm placeholder-gray-400" placeholder="Ceritakan kejadian atau keluhan Anda secara lengkap..." required>{{ old('description') }}</textarea>
-                            <x-input-error :messages="$errors->get('description')" class="mt-2" />
                         </div>
 
                         <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -40,12 +60,10 @@
                                     </span>
                                     <x-text-input id="location_text" name="location_text" type="text" class="block w-full pl-10 rounded-xl" :value="old('location_text')" placeholder="Nama jalan, RT/RW, atau koordinat" />
                                 </div>
-                                <x-input-error :messages="$errors->get('location_text')" class="mt-2" />
                             </div>
                             <div class="space-y-2">
                                 <x-input-label for="category" :value="'Kategori (Opsional)'" />
                                 <x-text-input id="category" name="category" type="text" class="block w-full rounded-xl" :value="old('category')" placeholder="Misal: Lingkungan, Keamanan, dll" />
-                                <x-input-error :messages="$errors->get('category')" class="mt-2" />
                             </div>
                         </div>
 
@@ -115,7 +133,6 @@
                                 </template>
                             </div>
 
-                            <x-input-error :messages="$errors->get('attachments')" class="mt-2" />
                             <div x-show="totalSize > 51200" class="text-xs text-red-500 font-bold">Total file melebihi batas 50MB. Harap kurangi file.</div>
                         </div>
 
@@ -132,7 +149,7 @@
                                 </span>
                             </x-primary-button>
                             <a href="{{ route('complaints.my') }}" x-show="!submitting" class="text-sm font-bold text-gray-500 hover:text-gray-700 transition-colors">
-                                Batal & Kembali
+                                Lihat Daftar Laporan
                             </a>
                         </div>
                     </form>
@@ -143,6 +160,16 @@
                                 files: [],
                                 submitting: false,
                                 totalSize: 0, // in KB
+                                init() {
+                                    this.syncInput();
+                                },
+
+                                syncInput() {
+                                    const dataTransfer = new DataTransfer();
+                                    this.files.forEach(file => dataTransfer.items.add(file));
+                                    this.$refs.finalInput.files = dataTransfer.files;
+                                    this.calculateTotalSize();
+                                },
 
                                 addFiles(newFiles) {
                                     for (let i = 0; i < newFiles.length; i++) {
@@ -157,7 +184,7 @@
 
                                         this.files.push(file);
                                     }
-                                    this.calculateTotalSize();
+                                    this.syncInput();
                                 },
 
                                 removeFile(index) {
@@ -166,7 +193,7 @@
                                         URL.revokeObjectURL(file.preview);
                                     }
                                     this.files.splice(index, 1);
-                                    this.calculateTotalSize();
+                                    this.syncInput();
                                 },
 
                                 calculateTotalSize() {
@@ -178,22 +205,12 @@
                                     return (size / (1024 * 1024)).toFixed(1) + ' MB';
                                 },
 
-                                truncateFilename(name) {
-                                    return name.length > 15 ? name.substring(0, 12) + '...' : name;
-                                },
-
                                 submitForm() {
                                     if (this.totalSize > 51200) return;
-                                    
                                     this.submitting = true;
-
-                                    // Create a new DataTransfer to populate the real file input
-                                    const dataTransfer = new DataTransfer();
-                                    this.files.forEach(file => dataTransfer.items.add(file));
                                     
-                                    this.$refs.finalInput.files = dataTransfer.files;
-                                    
-                                    // Actually submit
+                                    // Final sync just in case
+                                    this.syncInput();
                                     this.$el.submit();
                                 }
                             }

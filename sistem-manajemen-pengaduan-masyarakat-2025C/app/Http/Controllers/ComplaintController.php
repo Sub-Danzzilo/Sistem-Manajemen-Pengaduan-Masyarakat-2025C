@@ -82,8 +82,7 @@ class ComplaintController extends Controller
             }
         }
 
-        return redirect()->route('complaints.my')
-            ->with('status', 'Pengaduan berhasil dikirim.');
+        return back()->with('status', 'Laporan pengaduan Anda berhasil terkirim dan sedang diproses.');
     }
 
     /**
