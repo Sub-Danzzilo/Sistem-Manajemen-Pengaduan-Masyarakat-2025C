@@ -29,7 +29,6 @@ Route::middleware(['auth', 'verified', 'account_role'])->prefix('{account}/{role
     Route::patch('/profil', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profil', [ProfileController::class, 'destroy'])->name('profile.destroy');
 
-    Route::get('/laporan/{complaint}', [ComplaintController::class, 'show'])->name('complaints.show');
 
     // Masyarakat Routes
     Route::middleware(['role:'.User::ROLE_MASYARAKAT])->group(function () {
@@ -53,6 +52,8 @@ Route::middleware(['auth', 'verified', 'account_role'])->prefix('{account}/{role
         Route::post('/laporan/{complaint}/selesai', [AssignmentFollowUpController::class, 'resolve'])->name('instansi.complaints.resolve');
         Route::get('/notifikasi-instansi', [NotificationController::class, 'indexForUnit'])->name('notifications.unit');
     });
+
+    Route::get('/laporan/{complaint}', [ComplaintController::class, 'show'])->name('complaints.show');
 });
 
 require __DIR__.'/auth.php';
