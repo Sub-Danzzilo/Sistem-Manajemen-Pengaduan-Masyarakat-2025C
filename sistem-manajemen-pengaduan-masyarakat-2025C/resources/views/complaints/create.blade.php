@@ -14,7 +14,7 @@
                         <p class="text-sm text-gray-500 mt-1">Isi form di bawah ini dengan informasi yang akurat untuk mempercepat proses tindak lanjut.</p>
                     </div>
 
-                    <form method="POST" action="{{ route('complaints.store') }}" enctype="multipart/form-data" class="space-y-6">
+                    <form method="POST" action="{{ route('complaints.store') }}" enctype="multipart/form-data" class="space-y-6" x-data="{ submitting: false }" @submit="submitting = true">
                         @csrf
 
                         <div class="space-y-2">
@@ -49,16 +49,20 @@
 
                         <div class="space-y-2 p-6 bg-gray-50 rounded-2xl border border-dashed border-gray-200">
                             <x-input-label for="attachments" :value="'Lampiran Pendukung'" />
-                            <p class="text-xs text-gray-500 mb-3">Anda bisa mengunggah foto, dokumen, video, atau rekaman suara (maks. 10MB/file).</p>
+                            <p class="text-xs text-gray-500 mb-3">Anda bisa mengunggah foto, dokumen, video, atau rekaman suara (maks. 25MB/file).</p>
                             <input id="attachments" name="attachments[]" type="file" multiple class="block w-full text-sm text-gray-600 file:mr-4 file:py-2 file:px-4 file:rounded-xl file:border-0 file:bg-orange-500 file:text-white hover:file:bg-orange-600 cursor-pointer" />
                             <x-input-error :messages="$errors->get('attachments.*')" class="mt-2" />
                         </div>
 
                         <div class="flex flex-col md:flex-row items-center gap-4 pt-4">
-                            <x-primary-button class="w-full md:w-auto px-10 py-3 rounded-xl justify-center">
-                                Kirim Laporan Sekarang
+                            <x-primary-button class="w-full md:w-auto px-10 py-3 rounded-xl justify-center disabled:opacity-75" x-bind:disabled="submitting">
+                                <span x-show="!submitting">Kirim Laporan Sekarang</span>
+                                <span x-show="submitting" class="flex items-center gap-2">
+                                    <svg class="animate-spin h-4 w-4 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path></svg>
+                                    Sedang Mengunggah...
+                                </span>
                             </x-primary-button>
-                            <a href="{{ route('complaints.my') }}" class="text-sm font-bold text-gray-500 hover:text-gray-700 transition-colors">
+                            <a href="{{ route('complaints.my') }}" x-show="!submitting" class="text-sm font-bold text-gray-500 hover:text-gray-700 transition-colors">
                                 Batal & Kembali
                             </a>
                         </div>

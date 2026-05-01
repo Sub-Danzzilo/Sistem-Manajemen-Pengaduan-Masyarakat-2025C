@@ -24,7 +24,7 @@ class ComplaintController extends Controller
             'description' => ['required', 'string', 'max:5000'],
             'location_text' => ['nullable', 'string', 'max:255'],
             'category' => ['nullable', 'string', 'max:100'],
-            'attachments.*' => ['nullable', 'file', 'max:10240', 'mimes:jpg,jpeg,png,pdf,doc,docx,mp4,mov,avi,mp3,wav,m4a,ogg,webm'],
+            'attachments.*' => ['nullable', 'file', 'max:25600', 'mimes:jpg,jpeg,png,pdf,doc,docx,mp4,mov,avi,mp3,wav,m4a,ogg,webm'],
         ]);
 
         $complaint = Complaint::create([
