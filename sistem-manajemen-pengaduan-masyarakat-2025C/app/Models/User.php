@@ -10,6 +10,7 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+use App\Models\Notification as CustomNotification;
 
 #[Fillable(['name', 'email', 'password', 'role'])]
 #[Hidden(['password', 'remember_token'])]
@@ -17,6 +18,16 @@ class User extends Authenticatable
 {
     /** @use HasFactory<UserFactory> */
     use HasFactory, Notifiable;
+
+    /**
+     * Override the default notifications relationship to use custom model.
+     */
+    public function notifications(): HasMany
+    {
+        return $this->hasMany(CustomNotification::class, 'notifiable_id')
+            ->where('notifiable_type', $this->getMorphClass())
+            ->latest();
+    }
 
     public const ROLE_MASYARAKAT = 'masyarakat';
     public const ROLE_ADMIN = 'admin';

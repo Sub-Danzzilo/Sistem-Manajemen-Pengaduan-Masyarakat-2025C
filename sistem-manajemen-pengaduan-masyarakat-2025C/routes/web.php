@@ -29,13 +29,19 @@ Route::middleware(['auth', 'verified', 'account_role'])->prefix('{account}/{role
     Route::patch('/profil', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profil', [ProfileController::class, 'destroy'])->name('profile.destroy');
 
+    // Notifications
+    Route::get('/notifikasi', [NotificationController::class, 'index'])->name('notifications.index');
+    Route::post('/notifikasi/{id}/baca', [NotificationController::class, 'markAsRead'])->name('notifications.mark-as-read');
+    Route::delete('/notifikasi/{id}', [NotificationController::class, 'destroy'])->name('notifications.destroy');
+    Route::delete('/notifikasi-bersihkan', [NotificationController::class, 'clearAll'])->name('notifications.clear-all');
+
+
 
     // Masyarakat Routes
     Route::middleware(['role:'.User::ROLE_MASYARAKAT])->group(function () {
         Route::get('/laporan/buat', [ComplaintController::class, 'create'])->name('complaints.create');
         Route::post('/laporan', [ComplaintController::class, 'store'])->name('complaints.store');
         Route::get('/laporan-saya', [ComplaintController::class, 'myIndex'])->name('complaints.my');
-        Route::get('/notifikasi', [NotificationController::class, 'indexForCitizen'])->name('notifications.citizen');
     });
 
     // Admin Routes
@@ -50,7 +56,6 @@ Route::middleware(['auth', 'verified', 'account_role'])->prefix('{account}/{role
         Route::get('/tindak-lanjut', [AssignmentFollowUpController::class, 'index'])->name('instansi.complaints.index');
         Route::post('/laporan/{complaint}/progres', [AssignmentFollowUpController::class, 'progress'])->name('instansi.complaints.progress');
         Route::post('/laporan/{complaint}/selesai', [AssignmentFollowUpController::class, 'resolve'])->name('instansi.complaints.resolve');
-        Route::get('/notifikasi-instansi', [NotificationController::class, 'indexForUnit'])->name('notifications.unit');
     });
 
     Route::get('/laporan/{complaint}', [ComplaintController::class, 'show'])->name('complaints.show');

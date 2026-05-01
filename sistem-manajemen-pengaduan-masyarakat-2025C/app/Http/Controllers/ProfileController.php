@@ -8,6 +8,8 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\View\View;
+use Illuminate\Support\Facades\DB;
+use App\Models\SystemLog;
 
 class ProfileController extends Controller
 {
@@ -26,15 +28,27 @@ class ProfileController extends Controller
      */
     public function update(ProfileUpdateRequest $request, string $account, string $role): RedirectResponse
     {
-        $request->user()->fill($request->validated());
+        DB::beginTransaction();
+        try {
+            $request->user()->fill($request->validated());
 
-        if ($request->user()->isDirty('email')) {
-            $request->user()->email_verified_at = null;
+            if ($request->user()->isDirty('email')) {
+                $request->user()->email_verified_at = null;
+            }
+
+            $request->user()->save();
+            DB::commit();
+
+            return Redirect::route('profile.edit')->with('status', 'profile-updated');
+        } catch (\Throwable $e) {
+            DB::rollBack();
+            SystemLog::log(
+                message: 'Gagal update profil: ' . $e->getMessage(),
+                category: 'ProfileController@update',
+                exception: $e
+            );
+            return back()->withErrors(['error' => 'Gagal memperbarui profil. Silakan coba lagi.']);
         }
-
-        $request->user()->save();
-
-        return Redirect::route('profile.edit')->with('status', 'profile-updated');
     }
 
     /**
@@ -48,13 +62,25 @@ class ProfileController extends Controller
 
         $user = $request->user();
 
-        Auth::logout();
+        DB::beginTransaction();
+        try {
+            Auth::logout();
 
-        $user->delete();
+            $user->delete();
 
-        $request->session()->invalidate();
-        $request->session()->regenerateToken();
+            $request->session()->invalidate();
+            $request->session()->regenerateToken();
 
-        return Redirect::to('/');
+            DB::commit();
+            return Redirect::to('/');
+        } catch (\Throwable $e) {
+            DB::rollBack();
+            SystemLog::log(
+                message: 'Gagal hapus akun: ' . $e->getMessage(),
+                category: 'ProfileController@destroy',
+                exception: $e
+            );
+            return back()->withErrors(['error' => 'Terjadi kesalahan saat menghapus akun.']);
+        }
     }
 }

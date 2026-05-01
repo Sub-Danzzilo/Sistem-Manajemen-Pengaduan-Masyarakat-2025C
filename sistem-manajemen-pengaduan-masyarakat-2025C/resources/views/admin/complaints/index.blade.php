@@ -13,6 +13,17 @@
                 </div>
             @endif
 
+            @if ($errors->any())
+                <div class="bg-red-50 text-red-700 px-4 py-3 rounded-md border border-red-200">
+                    <p class="font-bold">Ada kesalahan pada input Anda:</p>
+                    <ul class="list-disc list-inside text-xs mt-1">
+                        @foreach ($errors->all() as $error)
+                            <li>{{ $error }}</li>
+                        @endforeach
+                    </ul>
+                </div>
+            @endif
+
             <div class="bg-white shadow-sm sm:rounded-lg p-6">
                 <form method="GET" class="flex flex-wrap gap-3 items-end">
                     <div>
@@ -180,6 +191,7 @@
                                                  Tolak
                                              </label>
                                          </div>
+                                         <x-input-error :messages="$errors->get('decision')" class="mt-2" />
                                      </div>
 
                                      <div x-show="decision === 'accepted'" class="space-y-3">
@@ -194,6 +206,9 @@
                                              $lastInstruction = $complaint->actions()->whereIn('action_type', ['decision_accepted', 'decision_updated'])->first()?->notes;
                                          @endphp
                                          <textarea name="instruction_for_unit" rows="2" class="block w-full border-gray-300 focus:border-orange-500 focus:ring-orange-500 rounded-md shadow-sm" placeholder="Instruksi tindak lanjut ke instansi">{{ $lastInstruction }}</textarea>
+                                         <x-input-error :messages="$errors->get('category')" class="mt-1" />
+                                         <x-input-error :messages="$errors->get('assigned_unit_id')" class="mt-1" />
+                                         <x-input-error :messages="$errors->get('instruction_for_unit')" class="mt-1" />
                                      </div>
 
                                      <div x-show="decision === 'rejected'" class="space-y-3">
@@ -201,6 +216,7 @@
                                              $lastReason = $complaint->status === 'rejected' ? $complaint->actions()->whereIn('action_type', ['decision_rejected', 'decision_updated'])->first()?->notes : '';
                                          @endphp
                                          <textarea name="rejection_reason" rows="2" class="block w-full border-gray-300 focus:border-red-500 focus:ring-red-500 rounded-md shadow-sm" placeholder="Alasan penolakan">{{ $lastReason }}</textarea>
+                                         <x-input-error :messages="$errors->get('rejection_reason')" class="mt-1" />
                                      </div>
 
                                      <div x-show="decision === 'accepted'">
@@ -208,6 +224,7 @@
                                              $lastMsgCitizen = $complaint->actions()->whereIn('action_type', ['decision_accepted', 'decision_updated'])->first()?->meta['message_for_citizen'] ?? '';
                                          @endphp
                                          <textarea name="message_for_citizen" rows="2" class="block w-full border-gray-300 focus:border-orange-500 focus:ring-orange-500 rounded-md shadow-sm" placeholder="Pesan untuk masyarakat">{{ $lastMsgCitizen }}</textarea>
+                                         <x-input-error :messages="$errors->get('message_for_citizen')" class="mt-1" />
                                      </div>
 
                                      <button x-show="decision === 'accepted'" type="submit" class="inline-flex items-center px-4 py-2 bg-orange-600 border border-transparent rounded-md font-semibold text-xs text-white uppercase hover:bg-orange-700">

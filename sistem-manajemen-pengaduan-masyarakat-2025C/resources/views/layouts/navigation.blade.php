@@ -2,23 +2,12 @@
     @php
         $user = Auth::user();
         if ($user) {
-            $notificationsQuery = \App\Models\ComplaintAction::query()
-                ->with('complaint')
-                ->latest()
-                ->limit(5);
-            
-            if ($user->isMasyarakat()) {
-                $notificationsQuery->whereHas('complaint', fn($q) => $q->where('reporter_id', $user->id));
-            } elseif ($user->isInstansi()) {
-                $notificationsQuery->whereHas('complaint', fn($q) => $q->where('assigned_unit_id', $user->id));
-            } elseif ($user->isAdmin()) {
-                $notificationsQuery->where('action_type', 'submitted');
-            }
-            
-            $notifs = $notificationsQuery->get();
-            $hasNew = $notifs->where('created_at', '>=', now()->subDays(3))->count() > 0;
+            $notifs = $user->notifications()->latest()->limit(5)->get();
+            $unreadCount = $user->unreadNotifications()->count();
+            $hasNew = $unreadCount > 0;
         } else {
             $notifs = collect();
+            $unreadCount = 0;
             $hasNew = false;
         }
     @endphp
@@ -77,25 +66,35 @@
                         </div>
                         <div class="max-h-80 overflow-y-auto">
                             @forelse($notifs as $n)
-                                <a href="{{ $user->isAdmin() ? route('admin.complaints.index') : route('complaints.show', $n->complaint) }}" class="block p-4 hover:bg-gray-50 transition-colors border-b border-gray-50 last:border-0">
-                                    <div class="flex justify-between items-start">
-                                        <p class="text-xs font-bold text-gray-900 line-clamp-1">{{ $n->complaint->title }}</p>
-                                        <span class="text-[8px] px-1.5 py-0.5 rounded bg-gray-100 text-gray-500 whitespace-nowrap ml-2">{{ $n->created_at->diffForHumans(null, true) }}</span>
-                                    </div>
-                                    <p class="text-[10px] text-gray-500 mt-1 line-clamp-2">
-                                        @if($n->action_type === 'submitted')
-                                            Laporan baru telah masuk dan menunggu verifikasi.
-                                        @else
-                                            "{{ $n->notes ?: $n->action_label }}"
-                                        @endif
-                                    </p>
-                                </a>
+                                <form action="{{ route('notifications.mark-as-read', ['id' => $n->id]) }}" method="POST">
+                                    @csrf
+                                    <button type="submit" class="w-full text-left block p-4 hover:bg-gray-50 transition-colors border-b border-gray-50 last:border-0 {{ $n->unread() ? 'bg-orange-50/30' : '' }}">
+                                        <div class="flex justify-between items-start">
+                                            <p class="text-xs font-bold text-gray-900 line-clamp-1">
+                                                @if($n->unread())
+                                                    <span class="inline-block w-2 h-2 bg-orange-500 rounded-full mr-1"></span>
+                                                @endif
+                                                {{ data_get($n->data, 'title') }}
+                                            </p>
+                                            <span class="text-[8px] px-1.5 py-0.5 rounded bg-gray-100 text-gray-500 whitespace-nowrap ml-2">{{ $n->created_at->diffForHumans(null, true) }}</span>
+                                        </div>
+                                        <p class="text-[10px] text-gray-500 mt-1 line-clamp-2">
+                                            {{ data_get($n->data, 'message') }}
+                                        </p>
+                                    </button>
+                                </form>
                             @empty
                                 <div class="p-8 text-center text-gray-400 text-xs">
                                     Belum ada notifikasi.
                                 </div>
                             @endforelse
                         </div>
+                        <div class="p-2 border-t border-gray-100 text-center">
+                            <a href="{{ route('notifications.index') }}" class="text-[10px] font-bold text-orange-600 hover:text-orange-700 uppercase tracking-widest">
+                                Lihat Semua Notifikasi
+                            </a>
+                        </div>
+
                     </x-slot>
                 </x-dropdown>
 

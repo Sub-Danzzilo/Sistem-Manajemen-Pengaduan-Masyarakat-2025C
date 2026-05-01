@@ -8,6 +8,8 @@ use App\Models\User;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\View\View;
+use Illuminate\Support\Facades\DB;
+use App\Models\SystemLog;
 
 class AssignmentFollowUpController extends Controller
 {
@@ -46,22 +48,37 @@ class AssignmentFollowUpController extends Controller
 
         $fromStatus = $complaint->status;
 
-        $complaint->update([
-            'assigned_unit_id' => $unit->id,
-            'status' => Complaint::STATUS_ASSIGNED,
-        ]);
+        DB::beginTransaction();
 
-        $this->logAction(
-            complaint: $complaint,
-            actorId: $request->user()->id,
-            actionType: 'assigned',
-            fromStatus: $fromStatus,
-            toStatus: Complaint::STATUS_ASSIGNED,
-            notes: $validated['notes'] ?? 'Pengaduan didisposisikan ke instansi.',
-            meta: ['unit_name' => $unit->name, 'unit_id' => $unit->id],
-        );
+        try {
+            $complaint->update([
+                'assigned_unit_id' => $unit->id,
+                'status' => Complaint::STATUS_ASSIGNED,
+            ]);
 
-        return back()->with('status', 'Pengaduan berhasil didisposisikan.');
+            $this->logAction(
+                complaint: $complaint,
+                actorId: $request->user()->id,
+                actionType: 'assigned',
+                fromStatus: $fromStatus,
+                toStatus: Complaint::STATUS_ASSIGNED,
+                notes: $validated['notes'] ?? 'Pengaduan didisposisikan ke instansi.',
+                meta: ['unit_name' => $unit->name, 'unit_id' => $unit->id],
+            );
+
+            DB::commit();
+            return back()->with('status', 'Pengaduan berhasil didisposisikan.');
+        } catch (\Throwable $e) {
+            DB::rollBack();
+
+            SystemLog::log(
+                message: 'Gagal mendisposisikan pengaduan: ' . $e->getMessage(),
+                category: 'AssignmentFollowUpController@assign',
+                exception: $e
+            );
+
+            return back()->withErrors(['error' => 'Gagal mendisposisikan pengaduan.']);
+        }
     }
 
     public function progress(string $account, string $role, Complaint $complaint, Request $request): RedirectResponse
@@ -75,20 +92,35 @@ class AssignmentFollowUpController extends Controller
         $fromStatus = $complaint->status;
         $isUpdate = $fromStatus === Complaint::STATUS_IN_PROGRESS;
 
-        if (!$isUpdate) {
-            $complaint->update(['status' => Complaint::STATUS_IN_PROGRESS]);
+        DB::beginTransaction();
+
+        try {
+            if (!$isUpdate) {
+                $complaint->update(['status' => Complaint::STATUS_IN_PROGRESS]);
+            }
+
+            $this->logAction(
+                complaint: $complaint,
+                actorId: $request->user()->id,
+                actionType: $isUpdate ? 'progress_updated' : 'in_progress',
+                fromStatus: $fromStatus,
+                toStatus: Complaint::STATUS_IN_PROGRESS,
+                notes: $validated['notes'],
+            );
+
+            DB::commit();
+            return back()->with('status', $isUpdate ? 'Catatan progres berhasil diperbarui.' : 'Status pengaduan diperbarui menjadi dalam proses.');
+        } catch (\Throwable $e) {
+            DB::rollBack();
+
+            SystemLog::log(
+                message: 'Gagal memperbarui progres: ' . $e->getMessage(),
+                category: 'AssignmentFollowUpController@progress',
+                exception: $e
+            );
+
+            return back()->withErrors(['error' => 'Gagal memperbarui progres pengaduan.']);
         }
-
-        $this->logAction(
-            complaint: $complaint,
-            actorId: $request->user()->id,
-            actionType: $isUpdate ? 'progress_updated' : 'in_progress',
-            fromStatus: $fromStatus,
-            toStatus: Complaint::STATUS_IN_PROGRESS,
-            notes: $validated['notes'],
-        );
-
-        return back()->with('status', $isUpdate ? 'Catatan progres berhasil diperbarui.' : 'Status pengaduan diperbarui menjadi dalam proses.');
     }
 
     public function resolve(string $account, string $role, Complaint $complaint, Request $request): RedirectResponse
@@ -102,23 +134,38 @@ class AssignmentFollowUpController extends Controller
         $fromStatus = $complaint->status;
         $isUpdate = $fromStatus === Complaint::STATUS_RESOLVED;
 
-        if (!$isUpdate) {
-            $complaint->update([
-                'status' => Complaint::STATUS_RESOLVED,
-                'resolved_at' => now(),
-            ]);
+        DB::beginTransaction();
+
+        try {
+            if (!$isUpdate) {
+                $complaint->update([
+                    'status' => Complaint::STATUS_RESOLVED,
+                    'resolved_at' => now(),
+                ]);
+            }
+
+            $this->logAction(
+                complaint: $complaint,
+                actorId: $request->user()->id,
+                actionType: $isUpdate ? 'resolve_updated' : 'resolved',
+                fromStatus: $fromStatus,
+                toStatus: Complaint::STATUS_RESOLVED,
+                notes: $validated['notes'],
+            );
+
+            DB::commit();
+            return back()->with('status', $isUpdate ? 'Hasil akhir berhasil diperbarui.' : 'Pengaduan ditandai selesai.');
+        } catch (\Throwable $e) {
+            DB::rollBack();
+
+            SystemLog::log(
+                message: 'Gagal menyelesaikan pengaduan: ' . $e->getMessage(),
+                category: 'AssignmentFollowUpController@resolve',
+                exception: $e
+            );
+
+            return back()->withErrors(['error' => 'Gagal menandai pengaduan selesai.']);
         }
-
-        $this->logAction(
-            complaint: $complaint,
-            actorId: $request->user()->id,
-            actionType: $isUpdate ? 'resolve_updated' : 'resolved',
-            fromStatus: $fromStatus,
-            toStatus: Complaint::STATUS_RESOLVED,
-            notes: $validated['notes'],
-        );
-
-        return back()->with('status', $isUpdate ? 'Hasil akhir berhasil diperbarui.' : 'Pengaduan ditandai selesai.');
     }
 
     public static function availableUnits()

@@ -8,6 +8,8 @@ use App\Models\User;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\View\View;
+use Illuminate\Support\Facades\DB;
+use App\Models\SystemLog;
 
 class VerificationController extends Controller
 {
@@ -51,75 +53,93 @@ class VerificationController extends Controller
             ? ($complaint->status === Complaint::STATUS_REJECTED ? 'rejected' : 'accepted')
             : $validated['decision'];
 
-        if ($decision === 'accepted') {
-            $request->validate([
-                'assigned_unit_id' => ['required', 'integer', 'exists:users,id'],
-                'instruction_for_unit' => ['required', 'string', 'max:2000'],
-            ]);
+        DB::beginTransaction();
 
-            $unit = User::query()
-                ->where('id', (int) $validated['assigned_unit_id'])
-                ->where('role', User::ROLE_INSTANSI)
-                ->firstOrFail();
+        try {
+            if ($decision === 'accepted') {
+                $request->validate([
+                    'assigned_unit_id' => ['required', 'integer', 'exists:users,id'],
+                    'instruction_for_unit' => ['required', 'string', 'max:2000'],
+                    'message_for_citizen' => ['required', 'string', 'max:2000'],
+                ]);
+
+                $unit = User::query()
+                    ->where('id', (int) $validated['assigned_unit_id'])
+                    ->where('role', User::ROLE_INSTANSI)
+                    ->firstOrFail();
+
+                $updateData = [
+                    'assigned_unit_id' => $unit->id,
+                    'category' => $validated['category'] ?? $complaint->category,
+                ];
+
+                if (!$isAlreadyProcessed) {
+                    $updateData['status'] = Complaint::STATUS_ASSIGNED;
+                    $updateData['verified_by_id'] = $adminUser->id;
+                }
+
+                $complaint->update($updateData);
+
+                $this->logAction(
+                    complaint: $complaint,
+                    actorId: $adminUser->id,
+                    actionType: $isAlreadyProcessed ? 'decision_updated' : 'decision_accepted',
+                    fromStatus: $fromStatus,
+                    toStatus: $complaint->status, // Use updated status
+                    notes: $validated['instruction_for_unit'],
+                    meta: [
+                        'decision' => 'accepted',
+                        'target_unit_id' => $unit->id,
+                        'target_unit_name' => $unit->name,
+                        'message_for_citizen' => $validated['message_for_citizen'],
+                        'instruction_for_unit' => $validated['instruction_for_unit'],
+                    ],
+                );
+
+                DB::commit();
+                return back()->with('status', 'Data verifikasi berhasil diperbarui.');
+            }
+
+            // Rejected Case
+            $rejectionData = $request->validate([
+                'rejection_reason' => ['required', 'string', 'max:2000'],
+            ]);
 
             if (!$isAlreadyProcessed) {
                 $complaint->update([
-                    'status' => Complaint::STATUS_ASSIGNED,
+                    'status' => Complaint::STATUS_REJECTED,
                     'verified_by_id' => $adminUser->id,
                 ]);
             }
 
-            $complaint->update([
-                'assigned_unit_id' => $unit->id,
-                'category' => $validated['category'] ?? $complaint->category,
-            ]);
-
             $this->logAction(
                 complaint: $complaint,
                 actorId: $adminUser->id,
-                actionType: $isAlreadyProcessed ? 'decision_updated' : 'decision_accepted',
+                actionType: $isAlreadyProcessed ? 'decision_updated' : 'decision_rejected',
                 fromStatus: $fromStatus,
-                toStatus: $isAlreadyProcessed ? $complaint->status : Complaint::STATUS_ASSIGNED,
-                notes: $validated['instruction_for_unit'],
+                toStatus: $complaint->status, // Use updated status
+                notes: $rejectionData['rejection_reason'],
                 meta: [
-                    'decision' => 'accepted',
-                    'target_unit_id' => $unit->id,
-                    'target_unit_name' => $unit->name,
-                    'message_for_citizen' => $validated['message_for_citizen'] ?? ($complaint->actions()->where('action_type', 'decision_accepted')->first()?->meta['message_for_citizen'] ?? ''),
-                    'instruction_for_unit' => $validated['instruction_for_unit'],
+                    'decision' => 'rejected',
+                    'rejection_reason' => $rejectionData['rejection_reason'],
+                    'message_for_citizen' => $rejectionData['rejection_reason'], // Use reason as message
                 ],
             );
 
-            return back()->with('status', 'Data verifikasi berhasil diperbarui.');
+            DB::commit();
+            return back()->with('status', 'Data penolakan berhasil diperbarui.');
+
+        } catch (\Throwable $e) {
+            DB::rollBack();
+
+            SystemLog::log(
+                message: 'Gagal memproses verifikasi: ' . $e->getMessage(),
+                category: 'VerificationController@decision',
+                exception: $e
+            );
+
+            return back()->withErrors(['error' => 'Gagal memperbarui data verifikasi. Silakan coba lagi.']);
         }
-
-        // Rejected Case
-        $rejectionData = $request->validate([
-            'rejection_reason' => ['required', 'string', 'max:2000'],
-        ]);
-
-        if (!$isAlreadyProcessed) {
-            $complaint->update([
-                'status' => Complaint::STATUS_REJECTED,
-                'verified_by_id' => $adminUser->id,
-            ]);
-        }
-
-        $this->logAction(
-            complaint: $complaint,
-            actorId: $adminUser->id,
-            actionType: $isAlreadyProcessed ? 'decision_updated' : 'decision_rejected',
-            fromStatus: $fromStatus,
-            toStatus: $isAlreadyProcessed ? $complaint->status : Complaint::STATUS_REJECTED,
-            notes: $rejectionData['rejection_reason'],
-            meta: [
-                'decision' => 'rejected',
-                'rejection_reason' => $rejectionData['rejection_reason'],
-                'message_for_citizen' => $rejectionData['rejection_reason'], // Use reason as message
-            ],
-        );
-
-        return back()->with('status', 'Data penolakan berhasil diperbarui.');
     }
 
     private function logAction(

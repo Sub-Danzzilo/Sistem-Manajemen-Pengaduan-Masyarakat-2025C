@@ -31,6 +31,25 @@
 
             <!-- Page Content -->
             <main>
+                <!-- Flash Messages -->
+                <div class="max-w-7xl mx-auto sm:px-6 lg:px-8 mt-4">
+                    @if (session('status'))
+                        <div class="bg-green-100 border-l-4 border-green-500 text-green-700 p-4 mb-4 rounded shadow-sm" role="alert">
+                            <p>{{ session('status') }}</p>
+                        </div>
+                    @endif
+
+                    @if ($errors->any())
+                        <div class="bg-red-100 border-l-4 border-red-500 text-red-700 p-4 mb-4 rounded shadow-sm" role="alert">
+                            <ul class="list-disc list-inside text-sm">
+                                @foreach ($errors->all() as $error)
+                                    <li>{{ $error }}</li>
+                                @endforeach
+                            </ul>
+                        </div>
+                    @endif
+                </div>
+
                 {{ $slot }}
             </main>
         </div>

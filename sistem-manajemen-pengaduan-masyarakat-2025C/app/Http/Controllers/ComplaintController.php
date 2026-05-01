@@ -9,6 +9,10 @@ use App\Models\User;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\View\View;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Storage;
+use App\Models\SystemLog;
 
 class ComplaintController extends Controller
 {
@@ -39,50 +43,79 @@ class ComplaintController extends Controller
             return back()->withErrors(['attachments' => 'Total ukuran file tidak boleh melebihi 50MB.'])->withInput();
         }
 
-        $complaint = Complaint::create([
-            'reporter_id' => $request->user()->id,
-            'title' => $validated['title'],
-            'description' => $validated['description'],
-            'location_text' => $validated['location_text'] ?? null,
-            'category' => $validated['category'] ?? null,
-            'status' => Complaint::STATUS_SUBMITTED,
-        ]);
+        DB::beginTransaction();
 
-        $this->logAction(
-            complaint: $complaint,
-            actorId: $request->user()->id,
-            actionType: 'submitted',
-            fromStatus: null,
-            toStatus: Complaint::STATUS_SUBMITTED,
-            notes: 'Pengaduan dibuat oleh masyarakat.',
-        );
+        try {
+            $complaint = Complaint::create([
+                'reporter_id' => $request->user()->id,
+                'title' => $validated['title'],
+                'description' => $validated['description'],
+                'location_text' => $validated['location_text'] ?? null,
+                'category' => $validated['category'] ?? null,
+                'status' => Complaint::STATUS_SUBMITTED,
+            ]);
 
-        if ($request->hasFile('attachments')) {
-            foreach ($request->file('attachments') as $file) {
-                $mime = $file->getMimeType();
-                $type = $this->resolveAttachmentType($mime);
-                
-                if ($type === ComplaintAttachment::TYPE_IMAGE) {
-                    // Compress Image
-                    $path = $this->compressAndStoreImage($file, "complaints/{$complaint->id}");
-                } else {
-                    // Normal Store
-                    $path = $file->store("complaints/{$complaint->id}", 'public');
+            $this->logAction(
+                complaint: $complaint,
+                actorId: $request->user()->id,
+                actionType: 'submitted',
+                fromStatus: null,
+                toStatus: Complaint::STATUS_SUBMITTED,
+                notes: 'Pengaduan dibuat oleh masyarakat.',
+            );
+
+            $uploadedFiles = [];
+
+            if ($request->hasFile('attachments')) {
+                foreach ($request->file('attachments') as $file) {
+                    $mime = $file->getMimeType();
+                    $type = $this->resolveAttachmentType($mime);
+                    
+                    if ($type === ComplaintAttachment::TYPE_IMAGE) {
+                        // Compress Image
+                        $path = $this->compressAndStoreImage($file, "complaints/{$complaint->id}");
+                    } else {
+                        // Normal Store
+                        $path = $file->store("complaints/{$complaint->id}", 'public');
+                    }
+
+                    $uploadedFiles[] = $path;
+
+                    ComplaintAttachment::create([
+                        'complaint_id' => $complaint->id,
+                        'uploaded_by_user_id' => $request->user()->id,
+                        'attachment_type' => $type,
+                        'original_name' => $file->getClientOriginalName(),
+                        'file_path' => $path,
+                        'mime_type' => $mime ?? 'application/octet-stream',
+                        'file_size' => Storage::disk('public')->size($path),
+                    ]);
                 }
-
-                ComplaintAttachment::create([
-                    'complaint_id' => $complaint->id,
-                    'uploaded_by_user_id' => $request->user()->id,
-                    'attachment_type' => $type,
-                    'original_name' => $file->getClientOriginalName(),
-                    'file_path' => $path,
-                    'mime_type' => $mime ?? 'application/octet-stream',
-                    'file_size' => \Illuminate\Support\Facades\Storage::disk('public')->size($path),
-                ]);
             }
-        }
 
-        return back()->with('status', 'Laporan pengaduan Anda berhasil terkirim dan sedang diproses.');
+            DB::commit();
+            return back()->with('status', 'Laporan pengaduan Anda berhasil terkirim dan sedang diproses.');
+
+        } catch (\Throwable $e) {
+            DB::rollBack();
+
+            // Cleanup uploaded files if transaction fails
+            if (isset($uploadedFiles)) {
+                foreach ($uploadedFiles as $filePath) {
+                    Storage::disk('public')->delete($filePath);
+                }
+            }
+
+            SystemLog::log(
+                message: 'Gagal menyimpan pengaduan: ' . $e->getMessage(),
+                category: 'ComplaintController@store',
+                exception: $e
+            );
+
+            return back()
+                ->withErrors(['error' => 'Terjadi kesalahan saat menyimpan pengaduan. Silakan coba lagi nanti atau hubungi administrator.'])
+                ->withInput();
+        }
     }
 
     /**

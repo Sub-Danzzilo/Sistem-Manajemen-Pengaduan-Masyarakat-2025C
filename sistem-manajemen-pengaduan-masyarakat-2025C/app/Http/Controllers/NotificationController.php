@@ -2,39 +2,49 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\ComplaintAction;
 use Illuminate\Http\Request;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\View\View;
 
 class NotificationController extends Controller
 {
-    public function indexForCitizen(Request $request, string $account, string $role): View
+    public function index(Request $request): View
     {
-        $actions = ComplaintAction::query()
-            ->with('complaint')
-            ->whereHas('complaint', fn ($query) => $query->where('reporter_id', $request->user()->id))
-            ->where(function ($query) {
-                $query->whereNotNull('notes')
-                    ->orWhere('action_type', 'like', 'decision_%');
-            })
-            ->latest()
-            ->paginate(12);
-
-        return view('notifications.citizen', compact('actions'));
+        $notifications = $request->user()->notifications()->paginate(15);
+        return view('notifications.index', compact('notifications'));
     }
 
-    public function indexForUnit(Request $request, string $account, string $role): View
+    public function markAsRead(Request $request, string $account, string $role, string $id): RedirectResponse
     {
-        $actions = ComplaintAction::query()
-            ->with('complaint')
-            ->whereHas('complaint', fn ($query) => $query->where('assigned_unit_id', $request->user()->id))
-            ->where(function ($query) {
-                $query->where('action_type', 'decision_accepted')
-                    ->orWhereIn('action_type', ['in_progress', 'resolved']);
-            })
-            ->latest()
-            ->paginate(12);
+        $notification = $request->user()->notifications()->findOrFail($id);
+        $notification->markAsRead();
 
-        return view('notifications.unit', compact('actions'));
+        $url = data_get($notification->data, 'url', '#');
+        
+        // If it's a dummy/internal URL, we might need to reconstruct it 
+        // but for now we assume it's a valid relative or absolute URL.
+        if (str_contains($url, 'notifikasi')) {
+             $url = route('complaints.show', [
+                'account' => $account,
+                'role' => $role,
+                'complaint' => data_get($notification->data, 'complaint_id', 0) ?: basename($url)
+             ]);
+        }
+
+        return redirect($url);
+    }
+
+    public function destroy(Request $request, string $account, string $role, string $id): RedirectResponse
+    {
+        $notification = $request->user()->notifications()->findOrFail($id);
+        $notification->delete();
+
+        return back()->with('status', 'Notifikasi berhasil dihapus.');
+    }
+
+    public function clearAll(Request $request): RedirectResponse
+    {
+        $request->user()->notifications()->delete();
+        return back()->with('status', 'Semua notifikasi berhasil dibersihkan.');
     }
 }

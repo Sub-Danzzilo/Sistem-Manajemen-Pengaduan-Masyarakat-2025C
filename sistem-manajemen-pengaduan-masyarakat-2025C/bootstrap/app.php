@@ -25,7 +25,25 @@ return Application::configure(basePath: dirname(__DIR__))
             guests: '/login',
             users: '/dashboard',
         );
+        $middleware->trustProxies(at: '*');
     })
-    ->withExceptions(function (Exceptions $exceptions): void {
-        //
+    ->withExceptions(function (Illuminate\Foundation\Configuration\Exceptions $exceptions): void {
+        $exceptions->report(function (\Throwable $e) {
+            if (app()->bound('request') && !request()->is('up')) {
+                \App\Models\SystemLog::log(
+                    message: $e->getMessage(),
+                    category: 'GlobalException',
+                    exception: $e
+                );
+            }
+        });
+
+        $exceptions->render(function (\Throwable $e, \Illuminate\Http\Request $request) {
+            if ($e instanceof \Symfony\Component\HttpKernel\Exception\HttpExceptionInterface) {
+                if ($e->getStatusCode() == 500) {
+                    return response()->view('errors.500', [], 500);
+                }
+            }
+            return null;
+        });
     })->create();
