@@ -81,32 +81,35 @@
                             </div>
 
                             <!-- Files List -->
-                            <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4" x-show="files.length > 0">
+                            <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4" x-show="files.length > 0">
                                 <template x-for="(file, index) in files" :key="index">
-                                    <div class="group relative aspect-square rounded-xl overflow-hidden bg-white border border-gray-100 shadow-sm">
-                                        <!-- Image Preview -->
-                                        <template x-if="file.type.startsWith('image/')">
-                                            <img :src="file.preview" class="w-full h-full object-cover">
-                                        </template>
-                                        
-                                        <!-- Other Icon Previews -->
-                                        <template x-if="!file.type.startsWith('image/')">
-                                            <div class="w-full h-full flex flex-col items-center justify-center p-2 text-center bg-gray-50">
-                                                <svg x-show="file.type.startsWith('video/')" class="w-8 h-8 text-gray-300" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 10l4.553-2.276A1 1 0 0121 8.618v6.764a1 1 0 01-1.447.894L15 14M5 18h8a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v8a2 2 0 002 2z"></path></svg>
-                                                <svg x-show="file.type.startsWith('audio/')" class="w-8 h-8 text-gray-300" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11a7 7 0 01-7 7m0 0a7 7 0 01-7-7m7 7v4m0 0H8m4 0h4m-4-8a3 3 0 01-3-3V5a3 3 0 116 0v6a3 3 0 01-3 3z"></path></svg>
-                                                <svg x-show="!file.type.startsWith('video/') && !file.type.startsWith('audio/')" class="w-8 h-8 text-gray-300" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1.024.195 1.414.586l7 7a2 2 0 010 2.828l-7 7a2 2 0 01-2.828 0l-7-7A1.994 1.994 0 013 12V7a4 4 0 014-4z"></path></svg>
-                                                <span x-text="truncateFilename(file.name)" class="mt-1 text-[8px] text-gray-400 truncate w-full px-1"></span>
-                                            </div>
-                                        </template>
+                                    <div class="group relative flex flex-col bg-white rounded-2xl border border-gray-100 shadow-sm overflow-hidden transition-all hover:shadow-md">
+                                        <!-- Preview/Icon Area -->
+                                        <div class="aspect-video relative bg-gray-100 flex items-center justify-center">
+                                            <!-- Image Preview -->
+                                            <template x-if="file.type.startsWith('image/') && file.preview">
+                                                <img :src="file.preview" class="w-full h-full object-cover">
+                                            </template>
+                                            
+                                            <!-- Icons for Video/Audio/Docs -->
+                                            <template x-if="!file.type.startsWith('image/') || !file.preview">
+                                                <div class="flex flex-col items-center justify-center text-gray-400">
+                                                    <svg x-show="file.type.startsWith('video/')" class="w-10 h-10 text-orange-500/50" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 10l4.553-2.276A1 1 0 0121 8.618v6.764a1 1 0 01-1.447.894L15 14M5 18h8a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v8a2 2 0 002 2z"></path></svg>
+                                                    <svg x-show="file.type.startsWith('audio/')" class="w-10 h-10 text-emerald-500/50" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11a7 7 0 01-7 7m0 0a7 7 0 01-7-7m7 7v4m0 0H8m4 0h4m-4-8a3 3 0 01-3-3V5a3 3 0 116 0v6a3 3 0 01-3 3z"></path></svg>
+                                                    <svg x-show="!file.type.startsWith('video/') && !file.type.startsWith('audio/')" class="w-10 h-10 text-blue-500/50" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1.024.195 1.414.586l7 7a2 2 0 010 2.828l-7 7a2 2 0 01-2.828 0l-7-7A1.994 1.994 0 013 12V7a4 4 0 014-4z"></path></svg>
+                                                </div>
+                                            </template>
 
-                                        <!-- Delete Button -->
-                                        <button @click.prevent="removeFile(index)" class="absolute top-1 right-1 p-1 bg-red-500 text-white rounded-full opacity-0 group-hover:opacity-100 transition-opacity shadow-sm">
-                                            <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
-                                        </button>
-                                        
-                                        <!-- Overlay info on hover -->
-                                        <div class="absolute inset-x-0 bottom-0 p-1 bg-black/40 text-[8px] text-white opacity-0 group-hover:opacity-100 transition-opacity">
-                                            <span x-text="formatSize(file.size)"></span>
+                                            <!-- Delete Button (Accessible for Mobile) -->
+                                            <button @click.prevent="removeFile(index)" class="absolute top-2 right-2 p-2 bg-red-500 hover:bg-red-600 text-white rounded-xl shadow-lg transition-colors z-10">
+                                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+                                            </button>
+                                        </div>
+
+                                        <!-- File Information Area -->
+                                        <div class="p-3 border-t border-gray-50">
+                                            <p x-text="file.name" class="text-[11px] font-bold text-gray-800 truncate mb-1"></p>
+                                            <p x-text="formatSize(file.size)" class="text-[9px] text-gray-500 font-medium"></p>
                                         </div>
                                     </div>
                                 </template>
@@ -145,9 +148,11 @@
                                     for (let i = 0; i < newFiles.length; i++) {
                                         const file = newFiles[i];
                                         
-                                        // Add preview for images
+                                        // Add preview only for images
                                         if (file.type.startsWith('image/')) {
                                             file.preview = URL.createObjectURL(file);
+                                        } else {
+                                            file.preview = null;
                                         }
 
                                         this.files.push(file);
@@ -157,7 +162,9 @@
 
                                 removeFile(index) {
                                     const file = this.files[index];
-                                    if (file.preview) URL.revokeObjectURL(file.preview);
+                                    if (file.preview) {
+                                        URL.revokeObjectURL(file.preview);
+                                    }
                                     this.files.splice(index, 1);
                                     this.calculateTotalSize();
                                 },
