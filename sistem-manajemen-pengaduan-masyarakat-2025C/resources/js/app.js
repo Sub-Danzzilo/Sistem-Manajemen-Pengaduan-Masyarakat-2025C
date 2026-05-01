@@ -6,15 +6,18 @@ window.Alpine = Alpine;
 
 Alpine.start();
 
-function togglePassword(button){
+function togglePassword(button) {
     const input = button.previousElementSibling;
-    if (input.type === "password") {
-        input.type = "text";
-        button.textContent = "Hide";
-    } else {
-        input.type = "password";
-        button.textContent = "Show";
-    }
+    const eyeOpen = button.querySelector('[data-eye-open]');
+    const eyeClosed = button.querySelector('[data-eye-closed]');
+
+    const isHidden = input.type === 'password';
+    input.type = isHidden ? 'text' : 'password';
+
+    eyeOpen.classList.toggle('hidden', isHidden);
+    eyeClosed.classList.toggle('hidden', !isHidden);
+
+    button.setAttribute('aria-label', isHidden ? 'Sembunyikan password' : 'Tampilkan password');
 }
 
 window.togglePassword = togglePassword;

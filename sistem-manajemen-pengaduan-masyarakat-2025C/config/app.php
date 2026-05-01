@@ -123,4 +123,6 @@ return [
         'store' => env('APP_MAINTENANCE_STORE', 'database'),
     ],
 
+    'admin_debug_enabled' => (bool) env('ADMIN_DEBUG_ENABLED', false),
+
 ];

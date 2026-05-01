@@ -7,6 +7,8 @@
 
         <title>{{ config('app.name', 'Laravel') }}</title>
 
+        <link rel="icon" type="image/svg+xml" href="{{ asset('images/Logo-SiMPeKat.svg') }}">
+
         <!-- Fonts -->
         <link rel="preconnect" href="https://fonts.bunny.net">
         <link href="https://fonts.bunny.net/css?family=figtree:400,500,600&display=swap" rel="stylesheet" />
@@ -18,7 +20,7 @@
         <div class="min-h-screen flex flex-col sm:justify-center items-center pt-6 sm:pt-0 bg-gray-100">
             <div>
                 <a href="/">
-                    <img src="{{ asset('images/Logo-SiMPeKat.svg') }}" class="w-20 h-20" alt="Logo">
+                    <img src="{{ asset('images/Logo-SiMPeKat.svg') }}" class="w-32 h-32" alt="Logo">
                 </a>
             </div>
 
