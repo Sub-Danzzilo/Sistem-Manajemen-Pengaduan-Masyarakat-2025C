@@ -52,7 +52,7 @@
                             default => 'bg-gray-50 text-gray-700 border-gray-100',
                         };
                     @endphp
-                    <div class="bg-white rounded-2xl shadow-sm border border-gray-100 p-6 flex flex-col justify-between hover:shadow-md transition-shadow">
+                    <div id="complaint-{{ $complaint->id }}" class="bg-white rounded-2xl shadow-sm border border-gray-100 p-6 flex flex-col justify-between hover:shadow-md transition-shadow scroll-mt-20">
                         <div>
                             <div class="flex justify-between items-start mb-4">
                                 <span class="px-3 py-1 rounded-full text-[10px] font-bold uppercase tracking-wider border {{ $statusClass }}">

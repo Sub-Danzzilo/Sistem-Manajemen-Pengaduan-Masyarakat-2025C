@@ -14,10 +14,12 @@ return Application::configure(basePath: dirname(__DIR__))
     ->withMiddleware(function (Middleware $middleware): void {
         $middleware->web(append: [
             \App\Http\Middleware\HandleAccountRoleUrl::class,
+            \App\Http\Middleware\DynamicSessionTimeout::class,
         ]);
         $middleware->alias([
             'role' => EnsureUserRole::class,
             'account_role' => \App\Http\Middleware\HandleAccountRoleUrl::class,
+            'session_timeout' => \App\Http\Middleware\DynamicSessionTimeout::class,
         ]);
         $middleware->redirectTo(
             guests: '/login',

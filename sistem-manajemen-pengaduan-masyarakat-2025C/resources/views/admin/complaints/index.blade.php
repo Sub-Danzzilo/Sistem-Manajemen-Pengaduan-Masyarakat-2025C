@@ -42,7 +42,7 @@
                             default => 'bg-gray-100 text-gray-800',
                         };
                     @endphp
-                    <div class="bg-white shadow-sm sm:rounded-lg p-6">
+                    <div id="complaint-{{ $complaint->id }}" class="bg-white shadow-sm sm:rounded-lg p-6 scroll-mt-20">
                         <div class="flex flex-col lg:flex-row lg:items-start lg:justify-between gap-4">
                             <div class="w-full lg:w-3/5">
                                 <div class="flex items-center justify-between mb-4">
@@ -73,7 +73,7 @@
 
                                 <div class="bg-gray-50 p-4 rounded-xl border border-gray-100 text-sm text-gray-700 leading-relaxed mb-6 relative">
                                     {{ $complaint->description }}
-                                    <a href="{{ route('complaints.show', $complaint) }}" class="absolute bottom-2 right-4 text-[10px] font-bold text-orange-600 hover:underline">Riwayat Lengkap &rarr;</a>
+                                    <a href="{{ route('complaints.show', $complaint) }}" class="absolute bottom-2 right-4 text-[10px] font-bold text-orange-600 hover:underline">Detail Lengkap &rarr;</a>
                                 </div>
 
                                 <!-- Attachments Preview -->

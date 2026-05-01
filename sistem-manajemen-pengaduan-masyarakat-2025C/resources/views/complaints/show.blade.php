@@ -17,7 +17,7 @@
                         default => route('complaints.my'),
                     };
                 @endphp
-                <a href="{{ $backRoute }}" class="inline-flex items-center text-sm font-bold text-gray-500 hover:text-orange-600 transition-colors">
+                <a href="{{ $backRoute }}#complaint-{{ $complaint->id }}" class="inline-flex items-center text-sm font-bold text-gray-500 hover:text-orange-600 transition-colors">
                     <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path></svg>
                     Kembali ke Daftar
                 </a>
