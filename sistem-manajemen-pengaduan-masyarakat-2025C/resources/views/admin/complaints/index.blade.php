@@ -71,8 +71,9 @@
                                     </div>
                                 </div>
 
-                                <div class="bg-gray-50 p-4 rounded-xl border border-gray-100 text-sm text-gray-700 leading-relaxed mb-6">
+                                <div class="bg-gray-50 p-4 rounded-xl border border-gray-100 text-sm text-gray-700 leading-relaxed mb-6 relative">
                                     {{ $complaint->description }}
+                                    <a href="{{ route('complaints.show', $complaint) }}" class="absolute bottom-2 right-4 text-[10px] font-bold text-orange-600 hover:underline">Riwayat Lengkap &rarr;</a>
                                 </div>
 
                                 <!-- Attachments Preview -->

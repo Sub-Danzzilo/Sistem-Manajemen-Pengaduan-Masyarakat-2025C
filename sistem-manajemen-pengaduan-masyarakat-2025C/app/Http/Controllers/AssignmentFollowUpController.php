@@ -16,6 +16,7 @@ class AssignmentFollowUpController extends Controller
         $status = $request->string('status')->toString();
 
         $complaints = Complaint::query()
+            ->with(['reporter', 'attachments'])
             ->where('assigned_unit_id', $request->user()->id)
             ->when($status !== '', fn ($query) => $query->where('status', $status))
             // Custom ordering: assigned (1), in_progress (2), resolved (3)
