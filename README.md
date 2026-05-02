@@ -73,13 +73,13 @@
 
 ## Informasi Akademik
 
-|                    | Keterangan                    |
-| ------------------ | ----------------------------- |
-| **Mata Kuliah**    | `[Nama Mata Kuliah]`          |
-| **Dosen Pengampu** | `[Nama Dosen Pengampu]`       |
-| **Program Studi**  | `[Nama Program Studi]`        |
-| **Universitas**    | `[Nama Universitas]`          |
-| **Semester**       | `[Semester / Tahun Akademik]` |
+| | Keterangan |
+| --- | --- |
+| **Mata Kuliah** | `Rekayasa Perangkat Lunak` |
+| **Dosen Pengampu** | `Moch. Badrus Sholeh, S.Kom., M.Kom.` |
+| **Program Studi** | `D4 Manajemen Informatika` |
+| **Universitas** | `Universitas Negeri Surabaya` |
+| **Semester** | `Semester 2` |
 
 ---
 
@@ -605,13 +605,13 @@ composer test
   Tambahkan atau kurangi baris sesuai jumlah anggota.
 -->
 
-| No  | Nama               | NIM     | Peran                                |
+| No | Nama | NIM | Peran |
 | --- | ------------------ | ------- | ------------------------------------ |
-| 1   | `[Nama Anggota 1]` | `[NIM]` | `[Peran, misal: Project Manager]`    |
-| 2   | `[Nama Anggota 2]` | `[NIM]` | `[Peran, misal: Backend Developer]`  |
-| 3   | `[Nama Anggota 3]` | `[NIM]` | `[Peran, misal: Frontend Developer]` |
-| 4   | `[Nama Anggota 4]` | `[NIM]` | `[Peran, misal: UI/UX Designer]`     |
-| 5   | `[Nama Anggota 5]` | `[NIM]` | `[Peran, misal: Tester]`             |
+| 1 | `Muhammad Riski` | `25091397078` | `[Peran, misal: Project Manager]` |
+| 2 | `Nikmal Maulina Arba'ani` | `25091397083` | `[Peran, misal: Backend Developer]` |
+| 3 | `Roselle Mustarino Marrethy` | `25091397087` | `[Peran, misal: Frontend Developer]` |
+| 4 | `Muhammad Rafi Adiwanto` | `25091397090` | `[Peran, misal: UI/UX Designer]` |
+| 5 | `Mokhammad Fahim Imanudin` | `25091397110` | `[Peran, misal: Tester]` |
 
 ---
 
