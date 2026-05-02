@@ -1,3 +1,5 @@
+<!-- markdownlint-disable MD033 -->
+<!-- markdownlint-disable MD041 -->
 <p align="center">
   <img src="https://img.shields.io/badge/PHP-8.3-777BB4?style=for-the-badge&logo=php&logoColor=white" alt="PHP Version">
   <img src="https://img.shields.io/badge/Laravel-13-FF2D20?style=for-the-badge&logo=laravel&logoColor=white" alt="Laravel Version">
@@ -6,7 +8,7 @@
   <img src="https://img.shields.io/badge/Lisensi-MIT-green?style=for-the-badge" alt="License">
 </p>
 
-
+<img src=".\public\images\Logo-SiMPeKat.svg" alt="Logo Sistem Manajemen Pengaduan Masyarakat" width="500">
 
 <h1 align="center">️ SiMPeKat</h1>
 <h3 align="center">Sistem Manajemen Pengaduan Masyarakat</h3>
@@ -18,42 +20,70 @@
 
 ---
 
-##  Daftar Isi
+## Daftar Isi
 
-- [Informasi Akademik](#-informasi-akademik)
-- [Analisis Masalah](#-analisis-masalah)
-- [Tentang Proyek](#-tentang-proyek)
-- [Fitur Unggulan](#-fitur-unggulan)
-- [Peran Pengguna](#-peran-pengguna)
-- [Alur Kerja Laporan](#-alur-kerja-laporan)
-- [Skema Database (ERD)](#-skema-database-erd)
-- [Teknologi yang Digunakan](#️-teknologi-yang-digunakan)
-- [Prasyarat](#-prasyarat)
-- [Cara Instalasi](#-cara-instalasi)
-- [Konfigurasi Lingkungan](#️-konfigurasi-lingkungan)
-- [Menjalankan Aplikasi](#-menjalankan-aplikasi)
-- [Kredensial Demo](#-kredensial-demo)
-- [Screenshot](#-screenshot)
-- [Struktur Proyek](#️-struktur-proyek)
-- [Menjalankan Pengujian](#-menjalankan-pengujian)
-- [Tim Pengembang](#-tim-pengembang)
-- [Lisensi](#-lisensi)
+- [Daftar Isi](#daftar-isi)
+- [Informasi Akademik](#informasi-akademik)
+- [Analisis Masalah](#analisis-masalah)
+  - [Latar Belakang Masalah](#latar-belakang-masalah)
+  - [Rumusan Masalah](#rumusan-masalah)
+  - [Tujuan](#tujuan)
+  - [Solusi yang Ditawarkan](#solusi-yang-ditawarkan)
+- [Tentang Proyek](#tentang-proyek)
+  - [Fitur Utama](#fitur-utama)
+- [Fitur Unggulan](#fitur-unggulan)
+- [Peran Pengguna](#peran-pengguna)
+- [Alur Kerja Laporan](#alur-kerja-laporan)
+  - [Tabel Status Laporan](#tabel-status-laporan)
+- [️ Skema Database (ERD)](#️-skema-database-erd)
+- [️ Teknologi yang Digunakan](#️-teknologi-yang-digunakan)
+  - [Backend](#backend)
+  - [Frontend](#frontend)
+  - [Development Tools](#development-tools)
+- [Prasyarat](#prasyarat)
+- [Cara Instalasi](#cara-instalasi)
+  - [1. Clone Repositori](#1-clone-repositori)
+  - [2. Install Dependensi](#2-install-dependensi)
+  - [3. Konfigurasi Environment](#3-konfigurasi-environment)
+  - [4. Siapkan Database](#4-siapkan-database)
+  - [5. Seed Data Demo (Opsional)](#5-seed-data-demo-opsional)
+  - [6. Build Asset Frontend](#6-build-asset-frontend)
+- [️ Konfigurasi Lingkungan](#️-konfigurasi-lingkungan)
+- [▶️ Menjalankan Aplikasi](#️-menjalankan-aplikasi)
+  - [Mode Development (Direkomendasikan)](#mode-development-direkomendasikan)
+  - [Mode Manual](#mode-manual)
+- [Kredensial Demo](#kredensial-demo)
+  - [Admin](#admin)
+  - [Instansi](#instansi)
+  - [Masyarakat](#masyarakat)
+- [Screenshot](#screenshot)
+  - [Halaman Login](#halaman-login)
+  - [Dashboard Masyarakat](#dashboard-masyarakat)
+  - [Form Buat Laporan](#form-buat-laporan)
+  - [Dashboard Admin — Verifikasi Laporan](#dashboard-admin--verifikasi-laporan)
+  - [Dashboard Instansi — Tindak Lanjut](#dashboard-instansi--tindak-lanjut)
+  - [Detail Laporan](#detail-laporan)
+  - [Notifikasi](#notifikasi)
+- [️ Struktur Proyek](#️-struktur-proyek)
+- [Menjalankan Pengujian](#menjalankan-pengujian)
+- [‍ Tim Pengembang](#-tim-pengembang)
+- [Lisensi](#lisensi)
 
 ---
 
-##  Informasi Akademik
+## Informasi Akademik
 
-| | Keterangan |
-|---|---|
-| **Mata Kuliah** | `[Nama Mata Kuliah]` |
-| **Dosen Pengampu** | `[Nama Dosen Pengampu]` |
-| **Program Studi** | `[Nama Program Studi]` |
-| **Universitas** | `[Nama Universitas]` |
-| **Semester** | `[Semester / Tahun Akademik]` |
+|                    | Keterangan                    |
+| ------------------ | ----------------------------- |
+| **Mata Kuliah**    | `[Nama Mata Kuliah]`          |
+| **Dosen Pengampu** | `[Nama Dosen Pengampu]`       |
+| **Program Studi**  | `[Nama Program Studi]`        |
+| **Universitas**    | `[Nama Universitas]`          |
+| **Semester**       | `[Semester / Tahun Akademik]` |
 
 ---
 
-##  Analisis Masalah
+## Analisis Masalah
 
 <!-- 
   Silakan isi bagian ini dengan analisis masalah yang melatarbelakangi
@@ -62,58 +92,62 @@
 -->
 
 ### Latar Belakang Masalah
+
 > `[Tuliskan latar belakang masalah di sini]`
 
 ### Rumusan Masalah
+
 > `[Tuliskan rumusan masalah di sini]`
 
 ### Tujuan
+
 > `[Tuliskan tujuan yang ingin dicapai di sini]`
 
 ### Solusi yang Ditawarkan
+
 > `[Tuliskan bagaimana SiMPeKat menjadi solusi dari masalah tersebut]`
 
 ---
 
-##  Tentang Proyek
+## Tentang Proyek
 
 **SiMPeKat** (Sistem Manajemen Pengaduan Masyarakat) adalah aplikasi web yang dirancang untuk mendigitalkan proses pengaduan masyarakat kepada pemerintah. Aplikasi ini menyediakan platform terstruktur bagi masyarakat untuk melaporkan keluhan, bagi admin untuk memverifikasi dan meneruskan laporan, serta bagi instansi terkait untuk menindaklanjuti dan menyelesaikan pengaduan.
 
 ### Fitur Utama
 
-| Peran | Fitur |
-|-------|-------|
+| Peran          | Fitur                                                                                                                                                      |
+| -------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | **Masyarakat** | Membuat laporan pengaduan, melampirkan file bukti (gambar, video, dokumen, audio), memantau status laporan secara real-time, menerima notifikasi pembaruan |
-| **Admin** | Memverifikasi laporan masuk, menerima atau menolak pengaduan, meneruskan laporan ke instansi terkait, mengelola seluruh data pengaduan |
-| **Instansi** | Menerima penugasan laporan, memperbarui progres tindak lanjut, menyelesaikan pengaduan, melampirkan bukti penyelesaian |
+| **Admin**      | Memverifikasi laporan masuk, menerima atau menolak pengaduan, meneruskan laporan ke instansi terkait, mengelola seluruh data pengaduan                     |
+| **Instansi**   | Menerima penugasan laporan, memperbarui progres tindak lanjut, menyelesaikan pengaduan, melampirkan bukti penyelesaian                                     |
 
 ---
 
-## ⭐ Fitur Unggulan
+## Fitur Unggulan
 
-- ** Sistem Notifikasi Real-Time** — Setiap perubahan status laporan otomatis mengirim notifikasi ke pihak terkait (masyarakat, admin, instansi)
-- ** Multi-File Attachment** — Mendukung upload berbagai jenis file: gambar, video, audio, dan dokumen (PDF, DOC, dll.) sebagai lampiran bukti
-- ** Dashboard Dinamis per Peran** — Setiap peran pengguna memiliki tampilan dashboard yang disesuaikan dengan kebutuhannya masing-masing
-- ** Pelacakan Status Transparan** — Riwayat lengkap setiap tindakan pada laporan tercatat sebagai *audit trail* yang dapat dilihat oleh pelapor
+- **Sistem Notifikasi Real-Time** — Setiap perubahan status laporan otomatis mengirim notifikasi ke pihak terkait (masyarakat, admin, instansi)
+- **Multi-File Attachment** — Mendukung upload berbagai jenis file: gambar, video, audio, dan dokumen (PDF, DOC, dll.) sebagai lampiran bukti
+- **Dashboard Dinamis per Peran** — Setiap peran pengguna memiliki tampilan dashboard yang disesuaikan dengan kebutuhannya masing-masing
+- **Pelacakan Status Transparan** — Riwayat lengkap setiap tindakan pada laporan tercatat sebagai *audit trail* yang dapat dilihat oleh pelapor
 - **️ Sistem Error Handling Robust** — Penanganan error yang komprehensif dengan pesan bilingual (Indonesia untuk error bisnis, Inggris untuk error sistem)
-- ** Responsive Design** — Antarmuka yang dioptimalkan untuk penggunaan di desktop maupun perangkat mobile
-- ** Autentikasi & Otorisasi** — Sistem login dengan pembatasan akses berbasis peran (role-based access control)
+- **Responsive Design** — Antarmuka yang dioptimalkan untuk penggunaan di desktop maupun perangkat mobile
+- **Autentikasi & Otorisasi** — Sistem login dengan pembatasan akses berbasis peran (role-based access control)
 
 ---
 
-##  Peran Pengguna
+## Peran Pengguna
 
 Aplikasi ini memiliki **3 peran utama** dengan hak akses yang berbeda-beda:
 
-| Peran | Deskripsi | Hak Akses |
-|-------|-----------|-----------|
-| **Masyarakat** | Warga yang ingin menyampaikan pengaduan | Buat laporan, lihat laporan sendiri, terima notifikasi |
-| **Admin** | Petugas pemerintah yang memverifikasi laporan | Verifikasi, terima/tolak, teruskan ke instansi, lihat semua laporan |
-| **Instansi** | Unit kerja pemerintah yang menindaklanjuti | Terima penugasan, update progres, selesaikan laporan |
+| Peran          | Deskripsi                                     | Hak Akses                                                           |
+| -------------- | --------------------------------------------- | ------------------------------------------------------------------- |
+| **Masyarakat** | Warga yang ingin menyampaikan pengaduan       | Buat laporan, lihat laporan sendiri, terima notifikasi              |
+| **Admin**      | Petugas pemerintah yang memverifikasi laporan | Verifikasi, terima/tolak, teruskan ke instansi, lihat semua laporan |
+| **Instansi**   | Unit kerja pemerintah yang menindaklanjuti    | Terima penugasan, update progres, selesaikan laporan                |
 
 ---
 
-##  Alur Kerja Laporan
+## Alur Kerja Laporan
 
 Berikut adalah diagram alur pemrosesan laporan pengaduan dalam sistem:
 
@@ -139,14 +173,14 @@ flowchart TD
 
 ### Tabel Status Laporan
 
-| Status | Label Indonesia | Keterangan |
-|--------|----------------|------------|
-| `submitted` | Menunggu Verifikasi | Laporan baru masuk, belum diverifikasi admin |
-| `verified` | Diverifikasi | Admin telah memverifikasi laporan |
-| `assigned` | Ditugaskan | Laporan telah diteruskan ke instansi terkait |
-| `in_progress` | Diproses | Instansi sedang menindaklanjuti laporan |
-| `resolved` | Selesai | Laporan telah selesai ditangani |
-| `rejected` | Ditolak | Laporan ditolak oleh admin |
+| Status        | Label Indonesia     | Keterangan                                   |
+| ------------- | ------------------- | -------------------------------------------- |
+| `submitted`   | Menunggu Verifikasi | Laporan baru masuk, belum diverifikasi admin |
+| `verified`    | Diverifikasi        | Admin telah memverifikasi laporan            |
+| `assigned`    | Ditugaskan          | Laporan telah diteruskan ke instansi terkait |
+| `in_progress` | Diproses            | Instansi sedang menindaklanjuti laporan      |
+| `resolved`    | Selesai             | Laporan telah selesai ditangani              |
+| `rejected`    | Ditolak             | Laporan ditolak oleh admin                   |
 
 ---
 
@@ -251,48 +285,51 @@ erDiagram
 ## ️ Teknologi yang Digunakan
 
 ### Backend
-| Teknologi | Versi | Keterangan |
-|-----------|-------|------------|
-| PHP | 8.3+ | Bahasa pemrograman server-side |
-| Laravel | 13.x | Framework PHP utama |
-| Laravel Breeze | 2.x | Starter kit autentikasi |
-| SQLite | 3 | Database ringan berbasis file |
+
+| Teknologi      | Versi | Keterangan                     |
+| -------------- | ----- | ------------------------------ |
+| PHP            | 8.3+  | Bahasa pemrograman server-side |
+| Laravel        | 13.x  | Framework PHP utama            |
+| Laravel Breeze | 2.x   | Starter kit autentikasi        |
+| SQLite         | 3     | Database ringan berbasis file  |
 
 ### Frontend
-| Teknologi | Versi | Keterangan |
-|-----------|-------|------------|
-| Blade | - | Template engine bawaan Laravel |
-| Tailwind CSS | 3.x | Utility-first CSS framework |
-| Alpine.js | 3.x | Lightweight JavaScript framework |
-| Vite | 8.x | Build tool & dev server |
+
+| Teknologi    | Versi | Keterangan                       |
+| ------------ | ----- | -------------------------------- |
+| Blade        | -     | Template engine bawaan Laravel   |
+| Tailwind CSS | 3.x   | Utility-first CSS framework      |
+| Alpine.js    | 3.x   | Lightweight JavaScript framework |
+| Vite         | 8.x   | Build tool & dev server          |
 
 ### Development Tools
-| Tools | Keterangan |
-|-------|------------|
-| Composer | Dependency manager untuk PHP |
-| NPM | Dependency manager untuk JavaScript |
-| Laravel Pint | Code style fixer |
-| PHPUnit | Framework unit testing |
-| Laravel Pail | Real-time log viewer |
+
+| Tools        | Keterangan                          |
+| ------------ | ----------------------------------- |
+| Composer     | Dependency manager untuk PHP        |
+| NPM          | Dependency manager untuk JavaScript |
+| Laravel Pint | Code style fixer                    |
+| PHPUnit      | Framework unit testing              |
+| Laravel Pail | Real-time log viewer                |
 
 ---
 
-##  Prasyarat
+## Prasyarat
 
 Pastikan perangkat Anda sudah terinstall:
 
-| Software | Versi Minimum | Cara Cek |
-|----------|--------------|----------|
-| PHP | 8.3 | `php -v` |
-| Composer | 2.x | `composer -V` |
-| Node.js | 18.x | `node -v` |
-| NPM | 9.x | `npm -v` |
+| Software | Versi Minimum | Cara Cek      |
+| -------- | ------------- | ------------- |
+| PHP      | 8.3           | `php -v`      |
+| Composer | 2.x           | `composer -V` |
+| Node.js  | 18.x          | `node -v`     |
+| NPM      | 9.x           | `npm -v`      |
 
 > **Catatan:** SQLite sudah termasuk dalam instalasi PHP secara default. Pastikan ekstensi `pdo_sqlite` aktif di `php.ini`.
 
 ---
 
-##  Cara Instalasi
+## Cara Instalasi
 
 ### 1. Clone Repositori
 
@@ -341,10 +378,11 @@ php artisan db:seed
 npm run build
 ```
 
->  **Shortcut:** Anda juga bisa menjalankan semua langkah di atas sekaligus dengan:
-> ```bash
-> composer setup
-> ```
+> **Shortcut:** Anda juga bisa menjalankan semua langkah di atas sekaligus dengan:
+
+```bash
+composer setup
+```
 
 ---
 
@@ -352,16 +390,16 @@ npm run build
 
 Berikut adalah variabel `.env` penting yang perlu diperhatikan:
 
-| Variabel | Default | Keterangan |
-|----------|---------|------------|
-| `APP_NAME` | `Laravel` | Nama aplikasi, ubah menjadi `SiMPeKat` |
-| `APP_ENV` | `local` | Environment: `local`, `staging`, `production` |
-| `APP_DEBUG` | `true` | Mode debug. **Set ke `false` di production!** |
-| `APP_URL` | `http://localhost` | URL dasar aplikasi |
-| `DB_CONNECTION` | `sqlite` | Driver database yang digunakan |
-| `QUEUE_CONNECTION` | `database` | Driver antrian untuk notifikasi |
-| `SESSION_DRIVER` | `database` | Driver penyimpanan session |
-| `MAIL_MAILER` | `log` | Driver pengiriman email |
+| Variabel           | Default            | Keterangan                                    |
+| ------------------ | ------------------ | --------------------------------------------- |
+| `APP_NAME`         | `Laravel`          | Nama aplikasi, ubah menjadi `SiMPeKat`        |
+| `APP_ENV`          | `local`            | Environment: `local`, `staging`, `production` |
+| `APP_DEBUG`        | `true`             | Mode debug. **Set ke `false` di production!** |
+| `APP_URL`          | `http://localhost` | URL dasar aplikasi                            |
+| `DB_CONNECTION`    | `sqlite`           | Driver database yang digunakan                |
+| `QUEUE_CONNECTION` | `database`         | Driver antrian untuk notifikasi               |
+| `SESSION_DRIVER`   | `database`         | Driver penyimpanan session                    |
+| `MAIL_MAILER`      | `log`              | Driver pengiriman email                       |
 
 > ️ **Penting:** Variabel `APP_DEBUG` adalah satu-satunya toggle untuk mengaktifkan/menonaktifkan fitur debug secara keseluruhan (termasuk fitur debug admin). Pastikan bernilai `false` saat deploy ke production.
 
@@ -378,7 +416,8 @@ composer dev
 ```
 
 Ini akan menjalankan:
-- **Server Laravel** — `php artisan serve` (http://localhost:8000)
+
+- **Server Laravel** — `php artisan serve` (<http://localhost:8000>)
 - **Queue Worker** — `php artisan queue:listen` (untuk memproses notifikasi)
 - **Log Viewer** — `php artisan pail` (monitoring log real-time)
 - **Vite Dev Server** — `npm run dev` (hot-reload aset frontend)
@@ -398,44 +437,44 @@ php artisan queue:listen
 npm run dev
 ```
 
-Akses aplikasi di: **http://localhost:8000**
+Akses aplikasi di: **<http://localhost:8000>**
 
 ---
 
-##  Kredensial Demo
+## Kredensial Demo
 
 Setelah menjalankan `php artisan db:seed`, akun-akun berikut dapat digunakan untuk login:
 
 ### Admin
 
-| Nama | Email | Password |
-|------|-------|----------|
+| Nama    | Email               | Password               |
+| ------- | ------------------- | ---------------------- |
 | Admin 1 | `user1@admin.go.id` | `atadmindotgodotaidi1` |
 
 <!-- Tambahkan akun admin lainnya di sini -->
 
 ### Instansi
 
-| Nama | Email | Password |
-|------|-------|----------|
+| Nama            | Email                  | Password                  |
+| --------------- | ---------------------- | ------------------------- |
 | Unit Instansi 1 | `unit1@instansi.go.id` | `atinstansidotgodotaidi1` |
 
 <!-- Tambahkan akun instansi lainnya di sini -->
 
 ### Masyarakat
 
-| Nama | Email | Password |
-|------|-------|----------|
-| Rian Rain | `Rianrain@fakemail.com` | `rianismyname` |
+| Nama                | Email                     | Password        |
+| ------------------- | ------------------------- | --------------- |
+| Rian Rain           | `Rianrain@fakemail.com`   | `rianismyname`  |
 | Clararissa Margaret | `Clararissa@fakemail.com` | `claramybaby90` |
 
 <!-- Tambahkan akun masyarakat lainnya di sini -->
 
->  **Tips:** Anda juga bisa mendaftarkan akun baru melalui halaman registrasi. Akun baru akan otomatis mendapatkan peran **Masyarakat**.
+> **Tips:** Anda juga bisa mendaftarkan akun baru melalui halaman registrasi. Akun baru akan otomatis mendapatkan peran **Masyarakat**.
 
 ---
 
-##  Screenshot
+## Screenshot
 
 <!-- 
   Ganti placeholder di bawah ini dengan screenshot aplikasi Anda.
@@ -446,31 +485,38 @@ Setelah menjalankan `php artisan db:seed`, akun-akun berikut dapat digunakan unt
 -->
 
 ### Halaman Login
+
 > `[Screenshot halaman login]`
 
 ### Dashboard Masyarakat
+
 > `[Screenshot dashboard masyarakat]`
 
 ### Form Buat Laporan
+
 > `[Screenshot form pembuatan laporan]`
 
 ### Dashboard Admin — Verifikasi Laporan
+
 > `[Screenshot dashboard admin]`
 
 ### Dashboard Instansi — Tindak Lanjut
+
 > `[Screenshot dashboard instansi]`
 
 ### Detail Laporan
+
 > `[Screenshot detail laporan]`
 
 ### Notifikasi
+
 > `[Screenshot halaman notifikasi]`
 
 ---
 
 ## ️ Struktur Proyek
 
-```
+```txt
 sistem-manajemen-pengaduan-masyarakat-2025C/
 │
 ├── app/                          # Kode inti aplikasi
@@ -540,7 +586,7 @@ sistem-manajemen-pengaduan-masyarakat-2025C/
 
 ---
 
-##  Menjalankan Pengujian
+## Menjalankan Pengujian
 
 ```bash
 # Jalankan semua test
@@ -559,22 +605,22 @@ composer test
   Tambahkan atau kurangi baris sesuai jumlah anggota.
 -->
 
-| No | Nama | NIM | Peran |
-|----|------|-----|-------|
-| 1 | `[Nama Anggota 1]` | `[NIM]` | `[Peran, misal: Project Manager]` |
-| 2 | `[Nama Anggota 2]` | `[NIM]` | `[Peran, misal: Backend Developer]` |
-| 3 | `[Nama Anggota 3]` | `[NIM]` | `[Peran, misal: Frontend Developer]` |
-| 4 | `[Nama Anggota 4]` | `[NIM]` | `[Peran, misal: UI/UX Designer]` |
-| 5 | `[Nama Anggota 5]` | `[NIM]` | `[Peran, misal: Tester]` |
+| No  | Nama               | NIM     | Peran                                |
+| --- | ------------------ | ------- | ------------------------------------ |
+| 1   | `[Nama Anggota 1]` | `[NIM]` | `[Peran, misal: Project Manager]`    |
+| 2   | `[Nama Anggota 2]` | `[NIM]` | `[Peran, misal: Backend Developer]`  |
+| 3   | `[Nama Anggota 3]` | `[NIM]` | `[Peran, misal: Frontend Developer]` |
+| 4   | `[Nama Anggota 4]` | `[NIM]` | `[Peran, misal: UI/UX Designer]`     |
+| 5   | `[Nama Anggota 5]` | `[NIM]` | `[Peran, misal: Tester]`             |
 
 ---
 
-##  Lisensi
+## Lisensi
 
 Proyek ini dilisensikan di bawah [MIT License](https://opensource.org/licenses/MIT).
 
 ---
 
 <p align="center">
-  Dibuat dengan ️ untuk Tugas Mata Kuliah Rekayasa Perangkat Lunak
+  Dibuat dengan ️❤️ untuk Tugas Mata Kuliah Rekayasa Perangkat Lunak
 </p>
