@@ -56,7 +56,7 @@
         </div>
     </form>
 
-    @if(env('ADMIN_DEBUG_ENABLED'))
+    @if(config('app.debug'))
         <div class="mt-8 pt-6 border-t border-gray-100">
             <div class="flex items-center gap-2 mb-4">
                 <div class="w-2 h-2 bg-red-500 animate-pulse rounded-full"></div>
