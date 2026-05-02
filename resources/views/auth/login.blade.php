@@ -29,7 +29,7 @@
         <div class="flex items-center justify-between mt-4">
             <label for="remember_me" class="inline-flex items-center">
                 <input id="remember_me" type="checkbox" class="rounded border-gray-300 text-orange-600 shadow-sm focus:ring-orange-500" name="remember">
-                <span class="ms-2 text-sm text-gray-600">{{ __('Ingatkan aku') }}</span>
+                <span class="ms-2 text-sm text-gray-600">{{ __('Ingatkan saya') }}</span>
             </label>
 
             @if (Route::has('password.request'))
@@ -48,7 +48,7 @@
             @if (Route::has('register'))
                 <div class="text-center text-sm text-gray-600 pt-2">
                     Belum punya akun? 
-                    <a href="{{ route('register') }}" class="font-bold text-orange-600 hover:text-orange-700 transition-colors">
+                    <a href="{{ route('register') }}" class="underline font-bold text-orange-600 hover:text-orange-700 transition-colors">
                         Daftar Sekarang
                     </a>
                 </div>

@@ -51,7 +51,7 @@
 
             <div class="text-center text-sm text-gray-600 pt-2">
                 Sudah punya akun? 
-                <a href="{{ route('login') }}" class="font-bold text-orange-600 hover:text-orange-700 transition-colors">
+                <a href="{{ route('login') }}" class="underline font-bold text-orange-600 hover:text-orange-700 transition-colors">
                     Masuk di sini
                 </a>
             </div>
