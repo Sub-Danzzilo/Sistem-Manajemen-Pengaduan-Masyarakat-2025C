@@ -213,8 +213,8 @@
                                             $unitInst = data_get($msg->meta, 'instruction_for_unit');
                                             
                                             $displayText = "";
-                                            if ($citizenMsg) $displayText .= "📢 [Ke Masyarakat]: " . $citizenMsg . "\n\n";
-                                            if ($unitInst) $displayText .= "🏢 [Ke Instansi]: " . $unitInst;
+                                            if ($citizenMsg) $displayText .= "Ke Masyarakat: " . $citizenMsg . "\n\n";
+                                            if ($unitInst) $displayText .= "Ke Instansi: " . $unitInst;
                                             
                                             if (empty($displayText)) $displayText = $msg->notes;
                                         }

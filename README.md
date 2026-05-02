@@ -6,7 +6,9 @@
   <img src="https://img.shields.io/badge/Lisensi-MIT-green?style=for-the-badge" alt="License">
 </p>
 
-<h1 align="center">🏛️ SiMPeKat</h1>
+
+
+<h1 align="center">️ SiMPeKat</h1>
 <h3 align="center">Sistem Manajemen Pengaduan Masyarakat</h3>
 
 <p align="center">
@@ -16,7 +18,7 @@
 
 ---
 
-## 📑 Daftar Isi
+##  Daftar Isi
 
 - [Informasi Akademik](#-informasi-akademik)
 - [Analisis Masalah](#-analisis-masalah)
@@ -39,7 +41,7 @@
 
 ---
 
-## 🎓 Informasi Akademik
+##  Informasi Akademik
 
 | | Keterangan |
 |---|---|
@@ -51,7 +53,7 @@
 
 ---
 
-## 🔍 Analisis Masalah
+##  Analisis Masalah
 
 <!-- 
   Silakan isi bagian ini dengan analisis masalah yang melatarbelakangi
@@ -73,7 +75,7 @@
 
 ---
 
-## 📋 Tentang Proyek
+##  Tentang Proyek
 
 **SiMPeKat** (Sistem Manajemen Pengaduan Masyarakat) adalah aplikasi web yang dirancang untuk mendigitalkan proses pengaduan masyarakat kepada pemerintah. Aplikasi ini menyediakan platform terstruktur bagi masyarakat untuk melaporkan keluhan, bagi admin untuk memverifikasi dan meneruskan laporan, serta bagi instansi terkait untuk menindaklanjuti dan menyelesaikan pengaduan.
 
@@ -89,17 +91,17 @@
 
 ## ⭐ Fitur Unggulan
 
-- **🔔 Sistem Notifikasi Real-Time** — Setiap perubahan status laporan otomatis mengirim notifikasi ke pihak terkait (masyarakat, admin, instansi)
-- **📎 Multi-File Attachment** — Mendukung upload berbagai jenis file: gambar, video, audio, dan dokumen (PDF, DOC, dll.) sebagai lampiran bukti
-- **📊 Dashboard Dinamis per Peran** — Setiap peran pengguna memiliki tampilan dashboard yang disesuaikan dengan kebutuhannya masing-masing
-- **🔄 Pelacakan Status Transparan** — Riwayat lengkap setiap tindakan pada laporan tercatat sebagai *audit trail* yang dapat dilihat oleh pelapor
-- **🛡️ Sistem Error Handling Robust** — Penanganan error yang komprehensif dengan pesan bilingual (Indonesia untuk error bisnis, Inggris untuk error sistem)
-- **📱 Responsive Design** — Antarmuka yang dioptimalkan untuk penggunaan di desktop maupun perangkat mobile
-- **🔐 Autentikasi & Otorisasi** — Sistem login dengan pembatasan akses berbasis peran (role-based access control)
+- ** Sistem Notifikasi Real-Time** — Setiap perubahan status laporan otomatis mengirim notifikasi ke pihak terkait (masyarakat, admin, instansi)
+- ** Multi-File Attachment** — Mendukung upload berbagai jenis file: gambar, video, audio, dan dokumen (PDF, DOC, dll.) sebagai lampiran bukti
+- ** Dashboard Dinamis per Peran** — Setiap peran pengguna memiliki tampilan dashboard yang disesuaikan dengan kebutuhannya masing-masing
+- ** Pelacakan Status Transparan** — Riwayat lengkap setiap tindakan pada laporan tercatat sebagai *audit trail* yang dapat dilihat oleh pelapor
+- **️ Sistem Error Handling Robust** — Penanganan error yang komprehensif dengan pesan bilingual (Indonesia untuk error bisnis, Inggris untuk error sistem)
+- ** Responsive Design** — Antarmuka yang dioptimalkan untuk penggunaan di desktop maupun perangkat mobile
+- ** Autentikasi & Otorisasi** — Sistem login dengan pembatasan akses berbasis peran (role-based access control)
 
 ---
 
-## 👥 Peran Pengguna
+##  Peran Pengguna
 
 Aplikasi ini memiliki **3 peran utama** dengan hak akses yang berbeda-beda:
 
@@ -111,19 +113,19 @@ Aplikasi ini memiliki **3 peran utama** dengan hak akses yang berbeda-beda:
 
 ---
 
-## 🔄 Alur Kerja Laporan
+##  Alur Kerja Laporan
 
 Berikut adalah diagram alur pemrosesan laporan pengaduan dalam sistem:
 
 ```mermaid
 flowchart TD
-    A([🧑 Masyarakat\nMembuat Laporan]) --> B{📋 Laporan Masuk\nstatus: submitted}
-    B --> C{🔍 Admin\nMemverifikasi}
-    C -->|Diterima| D[✅ Diverifikasi\nstatus: verified]
-    C -->|Ditolak| E[❌ Ditolak\nstatus: rejected]
-    D --> F[📌 Ditugaskan ke Instansi\nstatus: assigned]
-    F --> G[🔧 Diproses oleh Instansi\nstatus: in_progress]
-    G --> H([✔️ Selesai\nstatus: resolved])
+    A([ Masyarakat\nMembuat Laporan]) --> B{ Laporan Masuk\nstatus: submitted}
+    B --> C{ Admin\nMemverifikasi}
+    C -->|Diterima| D[ Diverifikasi\nstatus: verified]
+    C -->|Ditolak| E[ Ditolak\nstatus: rejected]
+    D --> F[ Ditugaskan ke Instansi\nstatus: assigned]
+    F --> G[ Diproses oleh Instansi\nstatus: in_progress]
+    G --> H([️ Selesai\nstatus: resolved])
 
     style A fill:#dbeafe,stroke:#3b82f6,color:#1e3a5f
     style B fill:#fef3c7,stroke:#f59e0b,color:#78350f
@@ -148,7 +150,7 @@ flowchart TD
 
 ---
 
-## 🗄️ Skema Database (ERD)
+## ️ Skema Database (ERD)
 
 Berikut adalah diagram relasi antar tabel dalam database:
 
@@ -246,7 +248,7 @@ erDiagram
 
 ---
 
-## 🛠️ Teknologi yang Digunakan
+## ️ Teknologi yang Digunakan
 
 ### Backend
 | Teknologi | Versi | Keterangan |
@@ -275,7 +277,7 @@ erDiagram
 
 ---
 
-## 📦 Prasyarat
+##  Prasyarat
 
 Pastikan perangkat Anda sudah terinstall:
 
@@ -290,7 +292,7 @@ Pastikan perangkat Anda sudah terinstall:
 
 ---
 
-## 🚀 Cara Instalasi
+##  Cara Instalasi
 
 ### 1. Clone Repositori
 
@@ -339,14 +341,14 @@ php artisan db:seed
 npm run build
 ```
 
-> 💡 **Shortcut:** Anda juga bisa menjalankan semua langkah di atas sekaligus dengan:
+>  **Shortcut:** Anda juga bisa menjalankan semua langkah di atas sekaligus dengan:
 > ```bash
 > composer setup
 > ```
 
 ---
 
-## ⚙️ Konfigurasi Lingkungan
+## ️ Konfigurasi Lingkungan
 
 Berikut adalah variabel `.env` penting yang perlu diperhatikan:
 
@@ -361,7 +363,7 @@ Berikut adalah variabel `.env` penting yang perlu diperhatikan:
 | `SESSION_DRIVER` | `database` | Driver penyimpanan session |
 | `MAIL_MAILER` | `log` | Driver pengiriman email |
 
-> ⚠️ **Penting:** Variabel `APP_DEBUG` adalah satu-satunya toggle untuk mengaktifkan/menonaktifkan fitur debug secara keseluruhan (termasuk fitur debug admin). Pastikan bernilai `false` saat deploy ke production.
+> ️ **Penting:** Variabel `APP_DEBUG` adalah satu-satunya toggle untuk mengaktifkan/menonaktifkan fitur debug secara keseluruhan (termasuk fitur debug admin). Pastikan bernilai `false` saat deploy ke production.
 
 ---
 
@@ -400,7 +402,7 @@ Akses aplikasi di: **http://localhost:8000**
 
 ---
 
-## 🔑 Kredensial Demo
+##  Kredensial Demo
 
 Setelah menjalankan `php artisan db:seed`, akun-akun berikut dapat digunakan untuk login:
 
@@ -429,11 +431,11 @@ Setelah menjalankan `php artisan db:seed`, akun-akun berikut dapat digunakan unt
 
 <!-- Tambahkan akun masyarakat lainnya di sini -->
 
-> 💡 **Tips:** Anda juga bisa mendaftarkan akun baru melalui halaman registrasi. Akun baru akan otomatis mendapatkan peran **Masyarakat**.
+>  **Tips:** Anda juga bisa mendaftarkan akun baru melalui halaman registrasi. Akun baru akan otomatis mendapatkan peran **Masyarakat**.
 
 ---
 
-## 📸 Screenshot
+##  Screenshot
 
 <!-- 
   Ganti placeholder di bawah ini dengan screenshot aplikasi Anda.
@@ -466,7 +468,7 @@ Setelah menjalankan `php artisan db:seed`, akun-akun berikut dapat digunakan unt
 
 ---
 
-## 🗂️ Struktur Proyek
+## ️ Struktur Proyek
 
 ```
 sistem-manajemen-pengaduan-masyarakat-2025C/
@@ -538,7 +540,7 @@ sistem-manajemen-pengaduan-masyarakat-2025C/
 
 ---
 
-## 🧪 Menjalankan Pengujian
+##  Menjalankan Pengujian
 
 ```bash
 # Jalankan semua test
@@ -550,7 +552,7 @@ composer test
 
 ---
 
-## 👨‍💻 Tim Pengembang
+## ‍ Tim Pengembang
 
 <!-- 
   Silakan isi tabel di bawah ini dengan data anggota tim Anda.
@@ -567,12 +569,12 @@ composer test
 
 ---
 
-## 📄 Lisensi
+##  Lisensi
 
 Proyek ini dilisensikan di bawah [MIT License](https://opensource.org/licenses/MIT).
 
 ---
 
 <p align="center">
-  Dibuat dengan ❤️ untuk Tugas Mata Kuliah Rekayasa Perangkat Lunak
+  Dibuat dengan ️ untuk Tugas Mata Kuliah Rekayasa Perangkat Lunak
 </p>
