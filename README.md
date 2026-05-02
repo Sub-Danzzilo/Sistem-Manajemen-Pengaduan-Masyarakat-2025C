@@ -93,19 +93,27 @@
 
 ### Latar Belakang Masalah
 
-> `[Tuliskan latar belakang masalah di sini]`
+Pelayanan publik seringkali terhambat oleh proses penanganan pengaduan yang masih manual, tidak terstruktur, dan kurang transparan. Hal ini menyebabkan keterlambatan dalam verifikasi dan tindak lanjut, serta sulitnya masyarakat dalam memantau perkembangan laporan yang mereka ajukan. Penggunaan sistem informasi digital menjadi kebutuhan mendesak untuk meningkatkan efisiensi, akurasi, dan kepercayaan masyarakat terhadap instansi pelayanan.
 
 ### Rumusan Masalah
 
-> `[Tuliskan rumusan masalah di sini]`
+- Bagaimana memfasilitasi pengajuan pengaduan masyarakat agar lebih mudah dan terstruktur?
+
+- Bagaimana mengoptimalkan proses verifikasi dan tindak lanjut laporan agar lebih efektif?
+
+- Bagaimana menyediakan sistem pemantauan status laporan secara real-time bagi pelapor?
 
 ### Tujuan
 
-> `[Tuliskan tujuan yang ingin dicapai di sini]`
+- Membangun platform yang memudahkan masyarakat dalam menyampaikan pengaduan secara digital.
+
+- Mengembangkan sistem manajemen untuk memproses verifikasi dan disposisi tindak lanjut secara terorganisir.
+
+- Menyediakan fitur monitoring status pengaduan yang transparan dan dapat diakses kapan saja.
 
 ### Solusi yang Ditawarkan
 
-> `[Tuliskan bagaimana SiMPeKat menjadi solusi dari masalah tersebut]`
+**SiMPeKat** hadir sebagai solusi digital terintegrasi untuk mentransformasi manajemen pengaduan konvensional menjadi sistem yang lebih responsif. Aplikasi ini menawarkan kemudahan pelaporan berbasis multimedia, percepatan alur verifikasi dan disposisi antar instansi, serta transparansi penuh melalui pelacakan status laporan secara real-time untuk meningkatkan kualitas pelayanan publik secara keseluruhan.
 
 ---
 
