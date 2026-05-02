@@ -17,7 +17,7 @@ class DebugController extends Controller
      */
     public function deleteAllComplaints(Request $request): RedirectResponse
     {
-        if (!config('app.admin_debug_enabled')) {
+        if (!config('app.debug')) {
             return back()->with('error', 'Fitur debug dinonaktifkan.');
         }
 

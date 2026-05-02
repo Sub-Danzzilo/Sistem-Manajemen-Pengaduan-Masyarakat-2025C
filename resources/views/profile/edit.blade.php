@@ -25,7 +25,7 @@
                 </div>
             </div>
 
-            @if (auth()->user()->isAdmin() && config('app.admin_debug_enabled'))
+            @if (auth()->user()->isAdmin() && config('app.debug'))
                 <div class="p-4 sm:p-8 bg-white shadow sm:rounded-lg border-2 border-red-100">
                     <div class="max-w-xl">
                         @include('profile.partials.admin-debug-features')

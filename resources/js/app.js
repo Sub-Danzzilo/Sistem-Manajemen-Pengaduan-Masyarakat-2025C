@@ -17,7 +17,7 @@ function togglePassword(button) {
     eyeOpen.classList.toggle('hidden', isHidden);
     eyeClosed.classList.toggle('hidden', !isHidden);
 
-    button.setAttribute('aria-label', isHidden ? 'Sembunyikan password' : 'Tampilkan password');
+    button.setAttribute('aria-label', isHidden ? 'Sembunyikan kata sandi' : 'Tampilkan kata sandi');
 }
 
 window.togglePassword = togglePassword;
