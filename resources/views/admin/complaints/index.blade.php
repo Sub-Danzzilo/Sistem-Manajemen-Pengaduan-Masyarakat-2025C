@@ -180,7 +180,7 @@
 
                                      <div x-show="decision === 'accepted'" class="space-y-3">
                                          <x-text-input name="category" type="text" class="block w-full" :value="$complaint->category" placeholder="Kategori laporan" />
-                                         <select name="assigned_unit_id" class="block w-full border-gray-300 focus:border-orange-500 focus:ring-orange-500 rounded-md shadow-sm">
+                                         <select name="assigned_unit_id" class="block w-full border-gray-300 focus:border-orange-500 focus:ring-orange-500 rounded-md shadow-sm" required>
                                              <option value="">Pilih instansi tujuan</option>
                                              @foreach ($units as $unit)
                                                  <option value="{{ $unit->id }}" @selected($complaint->assigned_unit_id === $unit->id)>{{ $unit->name }}</option>
