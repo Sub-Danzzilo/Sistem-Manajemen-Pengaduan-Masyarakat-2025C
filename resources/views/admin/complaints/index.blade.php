@@ -158,7 +158,6 @@
 
                             <div class="w-full lg:w-2/5" x-data="{ 
                                  decision: '{{ $complaint->status === 'rejected' ? 'rejected' : 'accepted' }}', 
-                                 confirmReject: false,
                                  isProcessed: {{ $complaint->status !== 'submitted' ? 'true' : 'false' }}
                              }">
                                  <form method="POST" action="{{ route('admin.complaints.decision', $complaint) }}" class="space-y-3">
@@ -211,13 +210,21 @@
                                          <x-input-error :messages="$errors->get('message_for_citizen')" class="mt-1" />
                                      </div>
 
-                                     <button x-show="decision === 'accepted'" type="submit" class="inline-flex items-center px-4 py-2 bg-orange-600 border border-transparent rounded-md font-semibold text-xs text-white uppercase hover:bg-orange-700">
-                                         {{ $complaint->status === 'submitted' ? 'Verifikasi & Teruskan' : 'Simpan Perubahan' }}
-                                     </button>
+                                     <div x-show="decision === 'accepted'">
+                                         @if($complaint->status === 'submitted')
+                                            <button type="button" x-on:click.prevent="$dispatch('open-modal', 'confirm-accept-{{ $complaint->id }}')" class="inline-flex items-center px-4 py-2 bg-orange-600 border border-transparent rounded-md font-semibold text-xs text-white uppercase hover:bg-orange-700">
+                                                Verifikasi & Teruskan
+                                            </button>
+                                         @else
+                                            <button type="submit" class="inline-flex items-center px-4 py-2 bg-orange-600 border border-transparent rounded-md font-semibold text-xs text-white uppercase hover:bg-orange-700">
+                                                Simpan Perubahan
+                                            </button>
+                                         @endif
+                                     </div>
                                      
                                      <div x-show="decision === 'rejected'">
                                          @if($complaint->status === 'submitted')
-                                            <button type="button" @click="confirmReject = true" class="inline-flex items-center px-4 py-2 bg-red-600 border border-transparent rounded-md font-semibold text-xs text-white uppercase hover:bg-red-700">
+                                            <button type="button" x-on:click.prevent="$dispatch('open-modal', 'confirm-reject-{{ $complaint->id }}')" class="inline-flex items-center px-4 py-2 bg-red-600 border border-transparent rounded-md font-semibold text-xs text-white uppercase hover:bg-red-700">
                                                 Tolak Laporan
                                             </button>
                                          @else
@@ -227,17 +234,23 @@
                                          @endif
                                      </div>
 
-                                     <div x-show="confirmReject" x-cloak class="rounded-md border border-red-200 bg-red-50 p-3 space-y-2">
-                                         <p class="text-sm text-red-700">Yakin menolak laporan ini? Pastikan alasan penolakan sudah diisi.</p>
-                                         <div class="flex gap-2">
-                                             <button type="submit" class="inline-flex items-center px-3 py-2 bg-red-600 border border-transparent rounded-md text-xs font-semibold text-white uppercase hover:bg-red-700">
-                                                 Ya, Tolak
-                                             </button>
-                                             <button type="button" @click="confirmReject = false" class="inline-flex items-center px-3 py-2 bg-white border border-gray-300 rounded-md text-xs font-semibold text-gray-700 uppercase hover:bg-gray-50">
-                                                 Batal
-                                             </button>
-                                         </div>
-                                     </div>
+                                     <!-- Konfirmasi Terima & Teruskan -->
+                                     <x-confirm-modal 
+                                        name="confirm-accept-{{ $complaint->id }}"
+                                        title="Konfirmasi Verifikasi Laporan"
+                                        description="Apakah Anda yakin ingin menerima dan meneruskan laporan ini? Pastikan kategori, instansi tujuan, dan instruksi sudah diisi dengan benar. Tindakan ini akan mengubah status laporan dan meneruskannya ke instansi terkait."
+                                        confirmText="Ya, Terima & Teruskan"
+                                        cancelText="Batal"
+                                        confirmType="primary" />
+
+                                     <!-- Konfirmasi Tolak Laporan -->
+                                     <x-confirm-modal 
+                                        name="confirm-reject-{{ $complaint->id }}"
+                                        title="Konfirmasi Penolakan Laporan"
+                                        description="Apakah Anda yakin ingin menolak laporan ini? Pastikan alasan penolakan sudah jelas karena alasan ini akan dibaca oleh pelapor."
+                                        confirmText="Ya, Tolak Laporan"
+                                        cancelText="Batal"
+                                        confirmType="danger" />
                                  </form>
                             </div>
                         </div>

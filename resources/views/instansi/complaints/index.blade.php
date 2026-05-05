@@ -170,10 +170,10 @@
                                 <!-- Form Update Progress -->
                                 <form x-show="!isResolving" x-cloak method="POST" action="{{ route('instansi.complaints.progress', $complaint) }}" class="space-y-3">
                                     @csrf
-                                    <x-input-label :value="'Update Progres Lapangan'" />
-                                    <textarea name="notes" rows="4" class="block w-full border-gray-300 focus:border-orange-500 focus:ring-orange-500 rounded-xl shadow-sm text-sm" placeholder="Catat tindakan atau progres yang telah dilakukan..." :disabled="isLocked" required>{{ $lastProgress }}</textarea>
+                                    <x-input-label :value="'Perbarui Kemajuan Lapangan'" />
+                                    <textarea name="notes" rows="4" class="block w-full border-gray-300 focus:border-orange-500 focus:ring-orange-500 rounded-xl shadow-sm text-sm" placeholder="Catat tindakan atau kemajuan yang telah dilakukan..." :disabled="isLocked" required>{{ $lastProgress }}</textarea>
                                     <button type="submit" class="w-full inline-flex justify-center items-center px-4 py-2 bg-orange-600 border border-transparent rounded-lg font-semibold text-xs text-white uppercase hover:bg-orange-700 transition-colors disabled:opacity-50" :disabled="isLocked">
-                                        {{ $complaint->status === 'in_progress' ? 'Simpan Perubahan' : 'Update Proses' }}
+                                        {{ $complaint->status === 'in_progress' ? 'Simpan Perubahan' : 'Perbarui Proses' }}
                                     </button>
                                 </form>
 
