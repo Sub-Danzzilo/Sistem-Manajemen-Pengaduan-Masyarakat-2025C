@@ -342,7 +342,7 @@ Pastikan perangkat Anda sudah terinstall:
 ### 1. Clone Repositori
 
 ```bash
-git clone https://github.com/[username]/sistem-manajemen-pengaduan-masyarakat-2025C.git
+git clone https://github.com/Sub-Danzzilo/sistem-manajemen-pengaduan-masyarakat-2025C.git
 cd sistem-manajemen-pengaduan-masyarakat-2025C
 ```
 
