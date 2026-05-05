@@ -10,7 +10,25 @@ use App\Http\Controllers\Admin\DebugController;
 use App\Models\User;
 use Illuminate\Support\Facades\Route;
 
-Route::get('/', fn() => redirect()->route('login'));
+Route::get('/', function (\Illuminate\Http\Request $request) {
+    if (!$request->cookie('has_seen_splash')) {
+        return redirect('/splash');
+    }
+    return redirect()->route('login');
+});
+
+Route::get('/splash', function (\Illuminate\Http\Request $request) {
+    $isDebug = $request->query('debug') == '1';
+    
+    // If it's not debug mode, we set the cookie for 1 year
+    if (!$isDebug) {
+        $cookie = cookie('has_seen_splash', true, 60 * 24 * 365);
+        return response()->view('splash', ['debug' => false])->withCookie($cookie);
+    }
+
+    // In debug mode, just show the view without setting cookie
+    return view('splash', ['debug' => true]);
+})->name('splash');
 
 // Redirection helper for authenticated users to get into the /{account}/{role}/ format
 Route::get('/dashboard', function (\Illuminate\Http\Request $request) {

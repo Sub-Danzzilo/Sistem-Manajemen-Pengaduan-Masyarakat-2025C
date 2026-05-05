@@ -46,4 +46,18 @@
             </div>
         </form>
     </x-modal>
+
+    @if(config('app.debug'))
+    <div class="p-4 bg-indigo-50 border border-indigo-200 rounded-md mt-6" id="debug-tools">
+        <h3 class="text-md font-semibold text-indigo-800 mb-2">Test Animasi Splash Screen</h3>
+        <p class="text-sm text-indigo-600 mb-4">
+            Fitur ini digunakan untuk melihat halaman animasi logo pengguna baru (Splash Screen) tanpa perlu menghapus cookie session. Animasi berjalan selama 3 detik.
+        </p>
+
+        <a href="{{ route('splash', ['debug' => 1]) }}" 
+           class="inline-flex items-center px-4 py-2 bg-white border border-gray-300 rounded-md font-semibold text-xs text-gray-700 uppercase tracking-widest shadow-sm hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 transition ease-in-out duration-150">
+            {{ __('Test Animasi Splash') }}
+        </a>
+    </div>
+    @endif
 </section>
