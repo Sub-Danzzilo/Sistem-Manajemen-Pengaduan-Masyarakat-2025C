@@ -35,8 +35,8 @@
 - [Peran Pengguna](#peran-pengguna)
 - [Alur Kerja Laporan](#alur-kerja-laporan)
   - [Tabel Status Laporan](#tabel-status-laporan)
-- [️ Skema Database (ERD)](#️-skema-database-erd)
-- [️ Teknologi yang Digunakan](#️-teknologi-yang-digunakan)
+- [️Skema Database (ERD)](#️skema-database-erd)
+- [️Teknologi yang Digunakan](#️teknologi-yang-digunakan)
   - [Backend](#backend)
   - [Frontend](#frontend)
   - [Development Tools](#development-tools)
@@ -48,8 +48,8 @@
   - [4. Siapkan Database](#4-siapkan-database)
   - [5. Seed Data Demo (Opsional)](#5-seed-data-demo-opsional)
   - [6. Build Asset Frontend](#6-build-asset-frontend)
-- [️ Konfigurasi Lingkungan](#️-konfigurasi-lingkungan)
-- [▶️ Menjalankan Aplikasi](#️-menjalankan-aplikasi)
+- [️Konfigurasi Lingkungan](#️konfigurasi-lingkungan)
+- [Menjalankan Aplikasi](#menjalankan-aplikasi)
   - [Mode Development (Direkomendasikan)](#mode-development-direkomendasikan)
   - [Mode Manual](#mode-manual)
 - [Kredensial Demo](#kredensial-demo)
@@ -64,9 +64,9 @@
   - [Dashboard Instansi — Tindak Lanjut](#dashboard-instansi--tindak-lanjut)
   - [Detail Laporan](#detail-laporan)
   - [Notifikasi](#notifikasi)
-- [️ Struktur Proyek](#️-struktur-proyek)
+- [️Struktur Proyek](#️struktur-proyek)
 - [Menjalankan Pengujian](#menjalankan-pengujian)
-- [‍ Tim Pengembang](#-tim-pengembang)
+- [‍Tim Pengembang](#tim-pengembang)
 - [Lisensi](#lisensi)
 
 ---
@@ -113,7 +113,7 @@ Pelayanan publik seringkali terhambat oleh proses penanganan pengaduan yang masi
 
 ### Solusi yang Ditawarkan
 
-**SiMPeKat** hadir sebagai solusi digital terintegrasi untuk mentransformasi manajemen pengaduan konvensional menjadi sistem yang lebih responsif. Aplikasi ini menawarkan kemudahan pelaporan berbasis multimedia, percepatan alur verifikasi dan disposisi antar instansi, serta transparansi penuh melalui pelacakan status laporan secara real-time untuk meningkatkan kualitas pelayanan publik secara keseluruhan.
+**SiMPeKat** (Sistem Manajemen Pengaduan Masyarakat) hadir sebagai solusi digital terintegrasi untuk mentransformasi manajemen pengaduan konvensional menjadi sistem yang lebih responsif. Aplikasi ini menawarkan kemudahan pelaporan berbasis multimedia, percepatan alur verifikasi dan disposisi antar instansi, serta transparansi penuh melalui pelacakan status laporan secara real-time untuk meningkatkan kualitas pelayanan publik secara keseluruhan.
 
 ---
 
@@ -192,7 +192,7 @@ flowchart TD
 
 ---
 
-## ️ Skema Database (ERD)
+## ️Skema Database (ERD)
 
 Berikut adalah diagram relasi antar tabel dalam database:
 
@@ -290,7 +290,7 @@ erDiagram
 
 ---
 
-## ️ Teknologi yang Digunakan
+## ️Teknologi yang Digunakan
 
 ### Backend
 
@@ -394,7 +394,7 @@ composer setup
 
 ---
 
-## ️ Konfigurasi Lingkungan
+## ️Konfigurasi Lingkungan
 
 Berikut adalah variabel `.env` penting yang perlu diperhatikan:
 
@@ -413,7 +413,7 @@ Berikut adalah variabel `.env` penting yang perlu diperhatikan:
 
 ---
 
-## ▶️ Menjalankan Aplikasi
+## Menjalankan Aplikasi
 
 ### Mode Development (Direkomendasikan)
 
@@ -522,7 +522,7 @@ Setelah menjalankan `php artisan db:seed`, akun-akun berikut dapat digunakan unt
 
 ---
 
-## ️ Struktur Proyek
+## ️Struktur Proyek
 
 ```txt
 sistem-manajemen-pengaduan-masyarakat-2025C/
@@ -606,7 +606,7 @@ composer test
 
 ---
 
-## ‍ Tim Pengembang
+## ‍Tim Pengembang
 
 <!-- 
   Silakan isi tabel di bawah ini dengan data anggota tim Anda.
@@ -615,11 +615,11 @@ composer test
 
 | No | Nama | NIM | Peran |
 | --- | ------------------ | ------- | ------------------------------------ |
-| 1 | `Muhammad Riski` | `25091397078` | `[Peran, misal: Project Manager]` |
-| 2 | `Nikmal Maulina Arba'ani` | `25091397083` | `[Peran, misal: Backend Developer]` |
-| 3 | `Roselle Mustarino Marrethy` | `25091397087` | `[Peran, misal: Frontend Developer]` |
-| 4 | `Muhammad Rafi Adiwanto` | `25091397090` | `[Peran, misal: UI/UX Designer]` |
-| 5 | `Mokhammad Fahim Imanudin` | `25091397110` | `[Peran, misal: Tester]` |
+| 1 | `Muhammad Riski` | `25091397078` | `Fullstack Developer & System Architect` |
+| 2 | `Nikmal Maulina Arba'ani` | `25091397083` | `Technical Writer & UI Designer` |
+| 3 | `Roselle Mustarino Marrethy` | `25091397087` | `Technical Writer & UI Designer` |
+| 4 | `Muhammad Rafi Adiwanto` | `25091397090` | `Technical Writer & UI Designer` |
+| 5 | `Mokhammad Fahim Imanudin` | `25091397110` | `Technical Writer & UI Designer` |
 
 ---
 
