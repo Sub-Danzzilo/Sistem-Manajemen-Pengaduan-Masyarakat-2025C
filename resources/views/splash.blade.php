@@ -22,7 +22,7 @@
              */
             :root {
                 /* Ubah angka ini untuk memperbesar/memperkecil logo */
-                --logo-base-width: 250px;
+                --logo-base-width: 300px;
             }
 
             .splash-logo {
