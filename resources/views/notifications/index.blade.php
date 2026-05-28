@@ -5,12 +5,20 @@
                 Notifikasi
             </h2>
             @if($notifications->isNotEmpty())
-                <form action="{{ route('notifications.clear-all') }}" method="POST" onsubmit="return confirm('Apakah Anda yakin ingin menghapus semua notifikasi?')">
+                <form action="{{ route('notifications.clear-all') }}" method="POST">
                     @csrf
                     @method('DELETE')
-                    <button type="submit" class="text-xs font-bold text-red-600 hover:text-red-700 uppercase tracking-widest bg-red-50 px-3 py-2 rounded-md transition-colors">
+                    <button type="button" x-data="" x-on:click.prevent="$dispatch('open-modal', 'confirm-clear-notifications')" class="text-xs font-bold text-red-600 hover:text-red-700 uppercase tracking-widest bg-red-50 px-3 py-2 rounded-md transition-colors">
                         Bersihkan Semua
                     </button>
+
+                    <x-confirm-modal 
+                        name="confirm-clear-notifications"
+                        title="Hapus Semua Notifikasi"
+                        description="Apakah Anda yakin ingin menghapus semua notifikasi? Tindakan ini tidak dapat dibatalkan."
+                        confirmText="Ya, Hapus Semua"
+                        cancelText="Batal"
+                        confirmType="danger" />
                 </form>
             @endif
         </div>

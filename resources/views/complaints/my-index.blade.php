@@ -47,7 +47,7 @@
                             default => 'bg-gray-50 text-gray-700 border-gray-100',
                         };
                     @endphp
-                    <div id="complaint-{{ $complaint->id }}" class="bg-white rounded-2xl shadow-sm border border-gray-100 p-6 flex flex-col justify-between hover:shadow-md transition-shadow scroll-mt-20">
+                    <div id="complaint-{{ $complaint->id }}" class="bg-white rounded-2xl shadow-sm border border-gray-100 p-6 flex flex-col justify-between hover:shadow-md transition-all scroll-mt-20 {{ $complaint->status === 'resolved' ? 'opacity-60 grayscale-[0.5]' : '' }}">
                         <div>
                             <div class="flex justify-between items-start mb-4">
                                 <span class="px-3 py-1 rounded-full text-[10px] font-bold uppercase tracking-wider border {{ $statusClass }}">

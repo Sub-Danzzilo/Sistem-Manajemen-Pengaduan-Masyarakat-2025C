@@ -34,7 +34,7 @@
                             default => 'bg-gray-100 text-gray-800',
                         };
                     @endphp
-                    <div id="complaint-{{ $complaint->id }}" class="bg-white shadow-sm sm:rounded-lg p-6 scroll-mt-20">
+                    <div id="complaint-{{ $complaint->id }}" class="bg-white shadow-sm sm:rounded-lg p-6 scroll-mt-20 transition-all {{ $complaint->status === 'resolved' ? 'opacity-60 grayscale-[0.5]' : '' }}">
                         <div class="flex flex-col lg:flex-row lg:items-start lg:justify-between gap-4">
                             <!-- Sisi Kiri: Detail Laporan -->
                             <div class="w-full lg:w-3/5">
@@ -172,9 +172,17 @@
                                     @csrf
                                     <x-input-label :value="'Perbarui Kemajuan Lapangan'" />
                                     <textarea name="notes" rows="4" class="block w-full border-gray-300 focus:border-orange-500 focus:ring-orange-500 rounded-xl shadow-sm text-sm" placeholder="Catat tindakan atau kemajuan yang telah dilakukan..." :disabled="isLocked" required>{{ $lastProgress }}</textarea>
-                                    <button type="submit" class="w-full inline-flex justify-center items-center px-4 py-2 bg-orange-600 border border-transparent rounded-lg font-semibold text-xs text-white uppercase hover:bg-orange-700 transition-colors disabled:opacity-50" :disabled="isLocked">
+                                    <button type="button" x-on:click.prevent="$dispatch('open-modal', 'confirm-progress-{{ $complaint->id }}')" class="w-full inline-flex justify-center items-center px-4 py-2 bg-orange-600 border border-transparent rounded-lg font-semibold text-xs text-white uppercase hover:bg-orange-700 transition-colors disabled:opacity-50" :disabled="isLocked">
                                         {{ $complaint->status === 'in_progress' ? 'Simpan Perubahan' : 'Perbarui Proses' }}
                                     </button>
+
+                                    <x-confirm-modal 
+                                        name="confirm-progress-{{ $complaint->id }}"
+                                        title="Konfirmasi Pembaruan Proses"
+                                        description="Apakah Anda yakin ingin memperbarui catatan kemajuan untuk laporan ini?"
+                                        confirmText="Ya, Perbarui"
+                                        cancelText="Batal"
+                                        confirmType="primary" />
                                 </form>
 
                                 <!-- Form Hasil Akhir -->
@@ -183,9 +191,17 @@
                                     <x-input-label :value="'Hasil Akhir / Penyelesaian'" />
                                     <textarea name="notes" rows="4" class="block w-full border-gray-300 focus:border-emerald-500 focus:ring-emerald-500 rounded-xl shadow-sm text-sm" placeholder="Jelaskan ringkasan hasil akhir bahwa masalah telah teratasi..." :disabled="isLocked" required>{{ $lastResolve }}</textarea>
                                     
-                                    <button x-show="!isLocked" type="submit" class="w-full inline-flex justify-center items-center px-4 py-2 bg-emerald-600 border border-transparent rounded-lg font-semibold text-xs text-white uppercase hover:bg-emerald-700 transition-colors">
+                                    <button x-show="!isLocked" type="button" x-on:click.prevent="$dispatch('open-modal', 'confirm-resolve-{{ $complaint->id }}')" class="w-full inline-flex justify-center items-center px-4 py-2 bg-emerald-600 border border-transparent rounded-lg font-semibold text-xs text-white uppercase hover:bg-emerald-700 transition-colors">
                                         Selesaikan Laporan
                                     </button>
+
+                                    <x-confirm-modal 
+                                        name="confirm-resolve-{{ $complaint->id }}"
+                                        title="Konfirmasi Penyelesaian Laporan"
+                                        description="Apakah Anda yakin ingin menandai laporan ini sebagai selesai? Pastikan hasil akhir sudah dijelaskan dengan detail."
+                                        confirmText="Ya, Selesaikan"
+                                        cancelText="Batal"
+                                        confirmType="primary" />
                                     
                                     <div x-show="isLocked" class="text-center mt-2 p-2 bg-emerald-50 rounded-lg border border-emerald-100">
                                         <span class="text-xs font-bold text-emerald-700 flex items-center justify-center gap-1">

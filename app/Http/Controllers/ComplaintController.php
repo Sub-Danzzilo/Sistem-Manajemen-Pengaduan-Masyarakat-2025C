@@ -186,6 +186,7 @@ class ComplaintController extends Controller
             ->where('reporter_id', $request->user()->id)
             ->withCount('attachments')
             ->when($status !== '', fn ($query) => $query->where('status', $status))
+            ->orderByRaw("CASE WHEN status = 'resolved' THEN 1 ELSE 0 END ASC")
             ->latest()
             ->paginate(10)
             ->withQueryString();

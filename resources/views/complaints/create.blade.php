@@ -17,7 +17,7 @@
 
                     <form method="POST" action="{{ route('complaints.store') }}" enctype="multipart/form-data" class="space-y-6" 
                         x-data="fileManager()" 
-                        @submit.prevent="submitForm">
+                        @submit="submitForm">
                         @csrf
 
                         <div class="space-y-2">
@@ -119,7 +119,7 @@
                         <input type="file" name="attachments[]" x-ref="finalInput" class="hidden" multiple>
 
                         <div class="flex flex-col md:flex-row items-center gap-4 pt-4">
-                            <x-primary-button class="w-full md:w-auto px-10 py-3 rounded-xl justify-center disabled:opacity-75" 
+                            <x-primary-button type="button" @click="openConfirmation" class="w-full md:w-auto px-10 py-3 rounded-xl justify-center disabled:opacity-75" 
                                 x-bind:disabled="submitting || totalSize > 51200">
                                 <span x-show="!submitting">Kirim Laporan Sekarang</span>
                                 <span x-show="submitting" class="flex items-center gap-2">
@@ -131,6 +131,14 @@
                                 Lihat Daftar Laporan
                             </a>
                         </div>
+
+                        <x-confirm-modal 
+                            name="confirm-submit-complaint"
+                            title="Konfirmasi Pengiriman Laporan"
+                            description="Apakah Anda yakin data yang Anda masukkan sudah benar? Laporan yang sudah dikirim akan segera diproses oleh admin."
+                            confirmText="Ya, Kirim Sekarang"
+                            cancelText="Batal"
+                            confirmType="primary" />
                     </form>
 
                     <script>
@@ -184,13 +192,18 @@
                                     return (size / (1024 * 1024)).toFixed(1) + ' MB';
                                 },
 
-                                submitForm() {
+                                openConfirmation() {
                                     if (this.totalSize > 51200) return;
+                                    if (!this.$el.checkValidity()) {
+                                        this.$el.reportValidity();
+                                        return;
+                                    }
+                                    this.$dispatch('open-modal', 'confirm-submit-complaint');
+                                },
+
+                                submitForm() {
                                     this.submitting = true;
-                                    
-                                    // Final sync just in case
                                     this.syncInput();
-                                    this.$el.submit();
                                 }
                             }
                         }

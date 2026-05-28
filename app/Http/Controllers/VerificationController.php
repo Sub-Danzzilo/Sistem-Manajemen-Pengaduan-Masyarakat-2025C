@@ -20,6 +20,14 @@ class VerificationController extends Controller
         $complaints = Complaint::query()
             ->with(['reporter', 'assignedUnit', 'attachments'])
             ->when($status !== '', fn ($query) => $query->where('status', $status))
+            ->orderByRaw("CASE 
+                WHEN status = 'submitted' THEN 1 
+                WHEN status = 'verified' THEN 2 
+                WHEN status = 'assigned' THEN 3 
+                WHEN status = 'in_progress' THEN 4 
+                WHEN status = 'rejected' THEN 5 
+                WHEN status = 'resolved' THEN 6 
+                ELSE 7 END")
             ->latest()
             ->paginate(10)
             ->withQueryString();
