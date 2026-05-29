@@ -16,7 +16,10 @@ class ProfileTest extends TestCase
 
         $response = $this
             ->actingAs($user)
-            ->get('/profile');
+            ->get(route('profile.edit', [
+                'account' => \Illuminate\Support\Str::slug($user->name),
+                'role' => strtolower($user->role)
+            ]));
 
         $response->assertOk();
     }
@@ -24,17 +27,24 @@ class ProfileTest extends TestCase
     public function test_profile_information_can_be_updated(): void
     {
         $user = User::factory()->create();
+        $originalSlug = \Illuminate\Support\Str::slug($user->name);
 
         $response = $this
             ->actingAs($user)
-            ->patch('/profile', [
+            ->patch(route('profile.update', [
+                'account' => $originalSlug,
+                'role' => strtolower($user->role)
+            ]), [
                 'name' => 'Test User',
                 'email' => 'test@example.com',
             ]);
 
         $response
             ->assertSessionHasNoErrors()
-            ->assertRedirect('/profile');
+            ->assertRedirect(route('profile.edit', [
+                'account' => $originalSlug,
+                'role' => strtolower($user->role)
+            ]));
 
         $user->refresh();
 
@@ -46,17 +56,24 @@ class ProfileTest extends TestCase
     public function test_email_verification_status_is_unchanged_when_the_email_address_is_unchanged(): void
     {
         $user = User::factory()->create();
+        $originalSlug = \Illuminate\Support\Str::slug($user->name);
 
         $response = $this
             ->actingAs($user)
-            ->patch('/profile', [
+            ->patch(route('profile.update', [
+                'account' => $originalSlug,
+                'role' => strtolower($user->role)
+            ]), [
                 'name' => 'Test User',
                 'email' => $user->email,
             ]);
 
         $response
             ->assertSessionHasNoErrors()
-            ->assertRedirect('/profile');
+            ->assertRedirect(route('profile.edit', [
+                'account' => $originalSlug,
+                'role' => strtolower($user->role)
+            ]));
 
         $this->assertNotNull($user->refresh()->email_verified_at);
     }
@@ -67,7 +84,10 @@ class ProfileTest extends TestCase
 
         $response = $this
             ->actingAs($user)
-            ->delete('/profile', [
+            ->delete(route('profile.destroy', [
+                'account' => \Illuminate\Support\Str::slug($user->name),
+                'role' => strtolower($user->role)
+            ]), [
                 'password' => 'password',
             ]);
 
@@ -83,16 +103,24 @@ class ProfileTest extends TestCase
     {
         $user = User::factory()->create();
 
+        $profileEditUrl = route('profile.edit', [
+            'account' => \Illuminate\Support\Str::slug($user->name),
+            'role' => strtolower($user->role)
+        ]);
+
         $response = $this
             ->actingAs($user)
-            ->from('/profile')
-            ->delete('/profile', [
+            ->from($profileEditUrl)
+            ->delete(route('profile.destroy', [
+                'account' => \Illuminate\Support\Str::slug($user->name),
+                'role' => strtolower($user->role)
+            ]), [
                 'password' => 'wrong-password',
             ]);
 
         $response
             ->assertSessionHasErrorsIn('userDeletion', 'password')
-            ->assertRedirect('/profile');
+            ->assertRedirect($profileEditUrl);
 
         $this->assertNotNull($user->fresh());
     }

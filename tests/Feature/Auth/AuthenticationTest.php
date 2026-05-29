@@ -27,7 +27,10 @@ class AuthenticationTest extends TestCase
         ]);
 
         $this->assertAuthenticated();
-        $response->assertRedirect(route('dashboard', absolute: false));
+        $response->assertRedirect(route('dashboard', [
+            'account' => \Illuminate\Support\Str::slug($user->name),
+            'role' => strtolower($user->role),
+        ], absolute: false));
     }
 
     public function test_users_can_not_authenticate_with_invalid_password(): void
