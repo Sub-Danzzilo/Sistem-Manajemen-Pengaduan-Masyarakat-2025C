@@ -8,3 +8,16 @@
         max-height: 500px;
     }
 }
+
+@layer utilities {
+    /* Auth page decoration enhancements */
+    .decoration-blob {
+        @apply fixed pointer-events-none z-0;
+        filter: blur(0.5px);
+    }
+    
+    .decoration-wave {
+        @apply fixed pointer-events-none z-0;
+        filter: blur(0.5px);
+    }
+}

@@ -17,14 +17,24 @@
         @vite(['resources/css/app.css', 'resources/js/app.js'])
     </head>
     <body class="font-sans text-gray-900 antialiased">
-        <div class="min-h-screen flex flex-col sm:justify-center items-center pt-6 sm:pt-0 bg-gray-100">
-            <div>
+        <div class="relative min-h-screen flex flex-col sm:justify-center items-center pt-6 sm:pt-0 bg-gray-100 overflow-hidden">
+            <!-- Decorative Background Shapes -->
+            <div class="fixed top-0 left-0 w-96 h-96 opacity-20 pointer-events-none z-0" style="margin-top: -120px; margin-left: -120px;">
+                <img src="{{ asset('images/decorations/blob-organic.svg') }}" alt="" class="w-full h-full">
+            </div>
+            
+            <div class="fixed bottom-0 right-0 w-96 h-96 opacity-25 pointer-events-none z-0" style="margin-bottom: -100px; margin-right: -120px;">
+                <img src="{{ asset('images/decorations/wave-organic.svg') }}" alt="" class="w-full h-full">
+            </div>
+            <!-- End Decorative Shapes -->
+
+            <div class="relative z-10">
                 <a href="/">
                     <img src="{{ asset('images/Logo-SiMPeKat.svg') }}" class="w-32 h-32" alt="Logo">
                 </a>
             </div>
 
-            <div class="w-full sm:max-w-md mt-6 px-6 py-4 bg-white shadow-md overflow-hidden sm:rounded-lg">
+            <div class="relative z-10 w-full sm:max-w-md mt-6 px-6 py-4 bg-white shadow-md overflow-hidden sm:rounded-lg">
                 {{ $slot }}
             </div>
         </div>
