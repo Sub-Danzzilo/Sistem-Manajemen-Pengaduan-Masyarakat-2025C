@@ -110,13 +110,11 @@
                         <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
                             @forelse ($complaint->attachments as $attachment)
                                 @php
-                                    $previewUrl = $attachment->attachment_type === 'audio' 
-                                        ? route('attachments.preview', [
-                                            'account' => request()->route('account'),
-                                            'role' => request()->route('role'),
-                                            'attachment' => $attachment->id
-                                        ])
-                                        : asset('storage/'.$attachment->file_path);
+                                    $previewUrl = route('attachments.preview', [
+                                        'account' => request()->route('account'),
+                                        'role' => request()->route('role'),
+                                        'attachment' => $attachment->id
+                                    ]);
                                     
                                     $downloadUrl = route('attachments.download', [
                                         'account' => request()->route('account'),

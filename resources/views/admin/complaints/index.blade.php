@@ -114,13 +114,11 @@
                                             @foreach($complaint->attachments as $file)
                                                 @php 
                                                     $isImage = $file->attachment_type === 'image'; 
-                                                    $previewUrl = $file->attachment_type === 'audio' 
-                                                        ? route('attachments.preview', [
-                                                            'account' => request()->route('account'),
-                                                            'role' => request()->route('role'),
-                                                            'attachment' => $file->id
-                                                        ])
-                                                        : asset('storage/'.$file->file_path);
+                                                    $previewUrl = route('attachments.preview', [
+                                                        'account' => request()->route('account'),
+                                                        'role' => request()->route('role'),
+                                                        'attachment' => $file->id
+                                                    ]);
                                                     
                                                     $downloadUrl = route('attachments.download', [
                                                         'account' => request()->route('account'),
@@ -131,7 +129,7 @@
                                                 <div class="group relative w-16 h-16 rounded-lg overflow-hidden border border-gray-200 hover:border-orange-400 transition-colors shadow-sm bg-gray-50">
                                                     <a href="{{ $previewUrl }}" target="_blank" class="block w-full h-full">
                                                         @if($isImage)
-                                                            <img src="{{ asset('storage/'.$file->file_path) }}" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-300">
+                                                            <img src="{{ $previewUrl }}" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-300">
                                                         @else
                                                             <div class="w-full h-full flex items-center justify-center">
                                                                 @if($file->attachment_type === 'video')
